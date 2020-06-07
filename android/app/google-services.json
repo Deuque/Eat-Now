@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "209510283767",
+    "firebase_url": "https://eat-now-76fd0.firebaseio.com",
+    "project_id": "eat-now-76fd0",
+    "storage_bucket": "eat-now-76fd0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209510283767:android:dff5aa761c19f59df096f2",
+        "android_client_info": {
+          "package_name": "dcinspirations.com.eat_now"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "209510283767-lh2cfaafpncudqn0bmlphgsele99632p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dcinspirations.com.eat_now",
+            "certificate_hash": "57754a7efa448a71110108e384248031cc6102a1"
+          }
+        },
+        {
+          "client_id": "209510283767-b4leni88ss7bfct6j13o1o36njjsjl2h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWVzdacZMy2Cu9mMw7s1v8GMqP_lBPEq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "209510283767-b4leni88ss7bfct6j13o1o36njjsjl2h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
