@@ -9,6 +9,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'cart_item.dart';
 
 import 'UserModel.dart';
+import 'delivery_item.dart';
 
 class MyService with ChangeNotifier, DiagnosticableTreeMixin {
   //set Streams
@@ -39,6 +40,10 @@ class MyService with ChangeNotifier, DiagnosticableTreeMixin {
   // my colors
   Color get aux1 => Color(0xFFFFFFFF);
 
+  Color get aux11 => Colors.white38;
+
+  Color get aux12 => Colors.white70;
+
   Color get aux2 => Color(0xFFE61111);
 
   Color get aux22 => Color(0xFFAF0D0D);
@@ -47,13 +52,14 @@ class MyService with ChangeNotifier, DiagnosticableTreeMixin {
 
   Color get aux33 => Color(0xFFFCF4F4);
 
-  Color get aux4 => Colors.grey[600];
+  Color get aux4 => Colors.grey[500];
 
   Color get aux5 => Color(0xFFFBFBFB);
 
   Color get aux6 => Colors.black87;
 
   Color get aux7 => Color(0xFFD4EBFE);
+  Color get aux77 => Color(0xFF1E88E5);
 
   Color get aux8 => Color(0xFFE5E5E5);
 
@@ -133,6 +139,20 @@ class MyService with ChangeNotifier, DiagnosticableTreeMixin {
     return false;
   }
 
+  void deleteAllCartItems(){
+    getCartList().clear();
+    notifyListeners();
+  }
+
+  //delivery items
+  List<DeliveryItem> deliveries = [];
+
+  List<DeliveryItem> getDeliveryList() => deliveries;
+
+  addToDelivery(DeliveryItem item) async {
+    deliveries.add(item);
+  }
+
   //toast builder
   void showToast(BuildContext context, text, {snackaction}) {
     final scaffold = Scaffold.of(context);
@@ -164,17 +184,17 @@ class MyService with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   //money resolver
-  moneyResolver(String s){
-    String newamount=s.substring(0,1);
+  moneyResolver(String s) {
+    String newamount = s.substring(0, 1);
     List sarray = s.split('');
-    for(int a=1;a<sarray.length;a++){
-      if((sarray.length-a)!=0 && (sarray.length-a)%3==0){
-        newamount =newamount+","+sarray[a];
+    for (int a = 1; a < sarray.length; a++) {
+      if ((sarray.length - a) != 0 && (sarray.length - a) % 3 == 0) {
+        newamount = newamount + "," + sarray[a];
         continue;
       }
-      newamount =newamount+sarray[a];
+      newamount = newamount + sarray[a];
     }
-    return  newamount;
+    return newamount;
   }
 
   /// Makes `Counter` readable inside the devtools by listing all of its properties

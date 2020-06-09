@@ -31,8 +31,10 @@ dependencies:
   fluttertoast:
   shared_preferences:
   progress_dialog: ^1.2.2
-  intl: ^0.15.8
+  intl: ^0.16.0
   flutter_rounded_progress_bar: ^0.1.2
+  flutter_paystack: ^1.0.3+1
+  get_it: ^4.0.2
 
   firebase_database:
   firebase_auth:
@@ -67,6 +69,7 @@ flutter:
     - assets/verify_img.jpg
     - assets/menu.png
     - assets/delete.png
+    - assets/paystack.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

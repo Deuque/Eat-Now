@@ -20,7 +20,7 @@ class Register extends StatefulWidget {
 
 class MyState extends State<Register> {
   var _name, _email, _password;
-  var _dob, _country, _state, _city, _address, _occupation, _income;
+  var _dob, _country, _state, _city, _address, _occupation, _num;
   final formkey = new GlobalKey<FormState>();
 
   checkFields() {
@@ -42,7 +42,8 @@ class MyState extends State<Register> {
       if (checkFields()) {
         pr.show();
         User user = User(
-            basicInfo: BasicInfo(email: _email, fname: _name, password: _password),
+            basicInfo:
+                BasicInfo(email: _email, fname: _name, password: _password),
             personalInfo: PersonalInfo(
                 dob: _dob,
                 country: _country,
@@ -50,25 +51,26 @@ class MyState extends State<Register> {
                 city: _city,
                 address: _address,
                 occupation: _occupation,
-                income: _income));
+                num: _num));
 
         CrudOperations.createUser(user).then((result) {
           if (result.error) {
             pr.hide();
             Fluttertoast.showToast(
-                msg: 'Register Error: '+result.errorMessage, toastLength: Toast.LENGTH_LONG);
-
-          }else{
-            CrudOperations.uploadData(result.data.user.uid, user).then((value){
+                msg: 'Register Error: ' + result.errorMessage,
+                toastLength: Toast.LENGTH_LONG);
+          } else {
+            CrudOperations.uploadData(result.data.user.uid, user).then((value) {
               pr.hide();
-              if(value.data){
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> AuthListener()));
-              }else{
+              if (value.data) {
+                Navigator.pushReplacement(
+                    context, MaterialPageRoute(builder: (_) => AuthListener()));
+              } else {
                 Fluttertoast.showToast(
-                    msg: 'Upload Error: '+result.errorMessage, toastLength: Toast.LENGTH_LONG);
+                    msg: 'Upload Error: ' + result.errorMessage,
+                    toastLength: Toast.LENGTH_LONG);
               }
             });
-
           }
         });
       }
@@ -109,93 +111,93 @@ class MyState extends State<Register> {
           Form(
               key: formkey,
               child: Container(
-            padding: EdgeInsets.all(15.0),
-            color: appstate.aux5,
-            child: Column(
-              children: <Widget>[
-                RegForms(
-                  label: 'Full Name',
-                  resolvetext: (value) => _name = value,
-                  isPassword: false,
-                ),
-                RegForms(
-                  label: 'Email',
-                  resolvetext: (value) => _email = value,
-                  isPassword: false,
-                ),
-                RegForms(
-                  label: 'Password',
-                  resolvetext: (value) => _password = value,
-                  isPassword: true,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 25, bottom: 10),
-                  child: Text(
-                    'Personal Information',
-                    style: GoogleFonts.asap(
-                        color: appstate.aux3,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 17),
-                  ),
-                ),
-                RegForms(
-                  label: 'Date of birth',
-                  resolvetext: (value) => _dob = value,
-                  isPassword: false,
-                ),
-                RegForms(
-                  label: 'Country/Region',
-                  resolvetext: (value) => _country = value,
-                  isPassword: false,
-                ),
-                RegForms(
-                  label: 'State',
-                  resolvetext: (value) => _state = value,
-                  isPassword: false,
-                ),
-                RegForms(
-                  label: 'City',
-                  resolvetext: (value) => _city = value,
-                  isPassword: false,
-                ),
-                RegForms(
-                  label: 'Address',
-                  resolvetext: (value) => _address = value,
-                  isPassword: false,
-                ),
-                RegForms(
-                  label: 'Occupation',
-                  resolvetext: (value) => _occupation = value,
-                  isPassword: false,
-                ),
-                RegForms(
-                  label: 'Income Range',
-                  resolvetext: (value) => _income = value,
-                  isPassword: false,
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 67,
-                  padding: EdgeInsets.all(15),
-                  child: RaisedButton(
-                    shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(30.0),
+                padding: EdgeInsets.all(15.0),
+                color: appstate.aux5,
+                child: Column(
+                  children: <Widget>[
+                    RegForms(
+                      label: 'Full Name',
+                      resolvetext: (value) => _name = value,
+                      isPassword: false,
                     ),
-                    color: appstate.aux2,
-                    elevation: 3.0,
-                    child: Text(
-                      'SUBMIT',
-                      style: GoogleFonts.asap(
-                          color: appstate.aux1,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16),
+                    RegForms(
+                      label: 'Email',
+                      resolvetext: (value) => _email = value,
+                      isPassword: false,
                     ),
-                    onPressed: createUser,
-                  ),
-                )
-              ],
-            ),
-          ))
+                    RegForms(
+                      label: 'Password',
+                      resolvetext: (value) => _password = value,
+                      isPassword: true,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 25, bottom: 10),
+                      child: Text(
+                        'Personal Information',
+                        style: GoogleFonts.asap(
+                            color: appstate.aux3,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 17),
+                      ),
+                    ),
+                    RegForms(
+                      label: 'Date of birth',
+                      resolvetext: (value) => _dob = value,
+                      isPassword: false,
+                    ),
+                    RegForms(
+                      label: 'Country/Region',
+                      resolvetext: (value) => _country = value,
+                      isPassword: false,
+                    ),
+                    RegForms(
+                      label: 'State',
+                      resolvetext: (value) => _state = value,
+                      isPassword: false,
+                    ),
+                    RegForms(
+                      label: 'City',
+                      resolvetext: (value) => _city = value,
+                      isPassword: false,
+                    ),
+                    RegForms(
+                      label: 'Address',
+                      resolvetext: (value) => _address = value,
+                      isPassword: false,
+                    ),
+                    RegForms(
+                      label: 'Occupation',
+                      resolvetext: (value) => _occupation = value,
+                      isPassword: false,
+                    ),
+                    RegForms(
+                      label: 'Mobile number',
+                      resolvetext: (value) => _num = value,
+                      isPassword: false,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 67,
+                      padding: EdgeInsets.all(15),
+                      child: RaisedButton(
+                        shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(30.0),
+                        ),
+                        color: appstate.aux2,
+                        elevation: 3.0,
+                        child: Text(
+                          'SUBMIT',
+                          style: GoogleFonts.asap(
+                              color: appstate.aux1,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16),
+                        ),
+                        onPressed: createUser,
+                      ),
+                    )
+                  ],
+                ),
+              ))
         ]));
   }
 }

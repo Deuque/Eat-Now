@@ -8,11 +8,10 @@ import 'package:provider/provider.dart';
 import '../models/MyServices.dart';
 import 'cart.dart';
 
-class NavItems extends StatelessWidget{
-
+class NavItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var appstate = Provider.of<MyService>(context,listen: true);
+    var appstate = Provider.of<MyService>(context, listen: true);
 
     Route _createRoute(Widget w) {
       return PageRouteBuilder(
@@ -30,7 +29,7 @@ class NavItems extends StatelessWidget{
       );
     }
 
-    _navigateToWidget(Widget w){
+    _navigateToWidget(Widget w) {
       Navigator.pop(context);
       Navigator.of(context).push(_createRoute(w));
     }
@@ -113,7 +112,6 @@ class NavItems extends StatelessWidget{
                     splashColor: appstate.aux22,
                     onTap: () {
                       _navigateToWidget(Cart());
-
                     },
                     child: Text(
                       'Cart',
@@ -150,5 +148,4 @@ class NavItems extends StatelessWidget{
       ),
     );
   }
-
 }

@@ -1,4 +1,3 @@
-
 import 'package:eat_now/verify_email.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,7 +13,9 @@ class AuthListener extends StatelessWidget {
   Widget build(BuildContext context) {
     var appstate = Provider.of<MyService>(context, listen: true);
     Widget state = Center(
-      child: CircularProgressIndicator(backgroundColor: appstate.aux1,),
+      child: CircularProgressIndicator(
+        backgroundColor: appstate.aux1,
+      ),
     );
     return StreamBuilder<FirebaseUser>(
         stream: FirebaseAuth.instance.onAuthStateChanged,
@@ -35,5 +36,4 @@ class AuthListener extends StatelessWidget {
           }
         });
   }
-
 }

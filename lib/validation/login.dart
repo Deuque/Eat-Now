@@ -2,13 +2,12 @@ import 'package:eat_now/models/basic_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
 import '../AuthListener.dart';
 import '../Crud.dart';
 import '../models/MyServices.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import 'login_forms.dart';
 
 class Login extends StatefulWidget {
@@ -43,14 +42,16 @@ class MyState extends State<Login> {
     LoginUser() {
       if (checkFields()) {
         pr.show();
-        CrudOperations.loginUser(BasicInfo(email: _email.toString().trim(), password: _password))
+        CrudOperations.loginUser(
+                BasicInfo(email: _email.toString().trim(), password: _password))
             .then((result) {
           pr.hide();
           if (!result.data) {
             Fluttertoast.showToast(
                 msg: result.errorMessage, toastLength: Toast.LENGTH_LONG);
-          }else{
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> AuthListener()));
+          } else {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (_) => AuthListener()));
           }
         });
       }

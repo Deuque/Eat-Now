@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import '../confirm_order.dart';
 import '../models/MyServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -56,7 +57,6 @@ class MyState extends State<Cart> {
                       alignment: Alignment.center,
                       child: Column(
                         children: <Widget>[
-
                           Text(
                             'Total',
                             textAlign: TextAlign.center,
@@ -76,28 +76,27 @@ class MyState extends State<Cart> {
 //                                  fontWeight: FontWeight.w700,
 //                                  fontSize: 29),
 //                            )
-                            RichText(
+                                RichText(
                               text: TextSpan(children: [
                                 WidgetSpan(
                                     child: Transform.translate(
-                                      offset: Offset(-3, -8),
-                                      child: Text(
-                                        'NGN',
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.asap(
-                                            color: appstate.aux2,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 18),
-                                      ),
-                                    )),
+                                  offset: Offset(-3, -8),
+                                  child: Text(
+                                    'NGN',
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.asap(
+                                        color: appstate.aux2,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 18),
+                                  ),
+                                )),
                                 TextSpan(
                                   text:
-                                  '${appstate.moneyResolver('$_totalPrice')}',
+                                      '${appstate.moneyResolver('$_totalPrice')}',
                                   style: GoogleFonts.asap(
                                       color: appstate.aux2,
                                       fontWeight: FontWeight.w700,
                                       fontSize: 29),
-
                                 )
                               ]),
                             ),
@@ -117,141 +116,28 @@ class MyState extends State<Cart> {
               height: 1,
               color: appstate.aux4,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 25),
-              child: Text(
-                'If you want to come to the office for delivery, kindly uncheck the option below',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.asap(
-                    color: appstate.aux2,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14),
-              ),
-            ),
-            Divider(
-              height: 1,
-              color: appstate.aux4,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10, bottom: 13.0, right: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                      child: CheckboxListTile(
-                    title: Text(
-                      'Delivery',
-                      textAlign: TextAlign.start,
-                      style: GoogleFonts.asap(
-                          color: appstate.aux6,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16),
-                    ),
-                    value: checkedValue,
-                    selected: true,
-                    onChanged: (newValue) {
-                      setState(() {
-                        checkedValue = newValue;
-                      });
-                    },
-                    controlAffinity: ListTileControlAffinity
-                        .leading, //  <-- leading Checkbox
-                  )),
-                  Text(
-                    'NGN300',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.asap(
-                        color: appstate.aux2,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              height: 50,
-              child: FlatButton(
-                color: appstate.aux2,
-                onPressed: () {},
-                child: Text(
-                  'ORDER',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.asap(
-                      color: appstate.aux1,
-                      fontWeight: FontWeight.w300,
-                      fontSize: 15),
-                ),
-              ),
-            )
-          ],
-        )
-
-//      Column(
-//        crossAxisAlignment: CrossAxisAlignment.center,
-//        children: <Widget>[
-//          Expanded(
-//            child: ListView(
-//              children: <Widget>[
-//                Container(
-//                  width: double.infinity,
-//                  color: appstate.aux33,
-//                  padding: EdgeInsets.all(28),
-//                  alignment: Alignment.center,
-//                  child: Column(
-//                    children: <Widget>[
-//                      Text(
-//                        'TOTAL AMOUNT',
-//                        textAlign: TextAlign.center,
-//                        style: GoogleFonts.asap(
-//                            color: appstate.aux2,
-//                            fontWeight: FontWeight.w500,
-//                            fontSize: 16),
-//                      ),
-//                      Padding(
-//                        padding: const EdgeInsets.only(top:6.0),
-//                        child: Text(
-//                          'NGN$_totalPrice',
-//                          textAlign: TextAlign.center,
-//                          style: GoogleFonts.asap(
-//                              color: appstate.aux2,
-//                              fontWeight: FontWeight.w700,
-//                              fontSize: 29),
-//                        ),
-//                      ),
-//                    ],
-//                  ),
-//                ),
-//                for (final item in cartitems) CartItemLayout(item)
-//              ],
+//            Padding(
+//              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 25),
+//              child: Text(
+//                'If you want to come to the office for delivery, kindly uncheck the option below',
+//                textAlign: TextAlign.center,
+//                style: GoogleFonts.asap(
+//                    color: appstate.aux2,
+//                    fontWeight: FontWeight.w400,
+//                    fontSize: 14),
+//              ),
 //            ),
-//          ),
-//          Divider(
-//            height: 1,
-//            color: appstate.aux4,
-//          ),
-//          Padding(
-//            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 25),
-//            child: Text(
-//              'If you want to come to the office for delivery, kindly uncheck the option below',
-//              textAlign: TextAlign.center,
-//              style: GoogleFonts.asap(
-//                  color: appstate.aux2,
-//                  fontWeight: FontWeight.w400,
-//                  fontSize: 14),
+//            Divider(
+//              height: 1,
+//              color: appstate.aux4,
 //            ),
-//          ),
-//          Divider(
-//            height: 1,
-//            color: appstate.aux4,
-//          ),
-//          Padding(
-//            padding: EdgeInsets.only(top:10,bottom:13.0,right: 20.0),
-//            child: Row(
-//              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//              children: <Widget>[
-//                Expanded(
-//                  child:CheckboxListTile(
+//            Padding(
+//              padding: EdgeInsets.only(top: 10, bottom: 13.0, right: 20.0),
+//              child: Row(
+//                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                children: <Widget>[
+//                  Expanded(
+//                      child: CheckboxListTile(
 //                    title: Text(
 //                      'Delivery',
 //                      textAlign: TextAlign.start,
@@ -267,39 +153,43 @@ class MyState extends State<Cart> {
 //                        checkedValue = newValue;
 //                      });
 //                    },
-//                    controlAffinity:
-//                    ListTileControlAffinity.leading, //  <-- leading Checkbox
+//                    controlAffinity: ListTileControlAffinity
+//                        .leading, //  <-- leading Checkbox
+//                  )),
+//                  Text(
+//                    'NGN300',
+//                    textAlign: TextAlign.center,
+//                    style: GoogleFonts.asap(
+//                        color: appstate.aux2,
+//                        fontWeight: FontWeight.w400,
+//                        fontSize: 16),
 //                  )
-//                ),
-//                Text(
-//                  'NGN300',
-//                  textAlign: TextAlign.center,
-//                  style: GoogleFonts.asap(
-//                      color: appstate.aux2,
-//                      fontWeight: FontWeight.w400,
-//                      fontSize: 16),
-//                )
-//              ],
-//            ),
-//          ),
-//          Container(
-//            width: double.infinity,
-//            height: 50,
-//            child: FlatButton(
-//              color: appstate.aux2,
-//              onPressed: () {},
-//              child: Text(
-//                'ORDER',
-//                textAlign: TextAlign.center,
-//                style: GoogleFonts.asap(
-//                    color: appstate.aux1,
-//                    fontWeight: FontWeight.w300,
-//                    fontSize: 15),
+//                ],
 //              ),
 //            ),
-//          )
-//        ],
-//      ),
+            Container(
+              width: double.infinity,
+              height: 50,
+              child: FlatButton(
+                color: appstate.aux2,
+                onPressed: () {
+                  if(!cartitems.isEmpty){
+                    Navigator.push(context, MaterialPageRoute(builder: (_)=>ConfirmOrder()));
+                  }
+                },
+                child: Text(
+                  'ORDER',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.asap(
+                      color: appstate.aux1,
+                      fontWeight: FontWeight.w300,
+                      fontSize: 15),
+                ),
+              ),
+            )
+          ],
+        )
+
         );
   }
 }

@@ -64,19 +64,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var appstate = Provider.of<MyService>(context, listen: true);
 
-
     return Scaffold(
         backgroundColor: appstate.aux2,
-        body: isSplash ? Container(
-          color: appstate.aux2,
-          child: Center(
-            child: Image.asset('assets/logo1.jpeg'),
-          ),
-        ) :
-        AuthListener()
-    );
+        body: isSplash
+            ? Container(
+                color: appstate.aux2,
+                child: Center(
+                  child: Image.asset('assets/logo1.jpeg'),
+                ),
+              )
+            : AuthListener());
   }
 }
-
-
-

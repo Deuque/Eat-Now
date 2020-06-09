@@ -22,7 +22,7 @@ class FoodLayout extends StatelessWidget {
       child: Card(
         elevation: 3,
         child: Padding(
-        padding: EdgeInsets.all(11.0),
+          padding: EdgeInsets.all(11.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -35,15 +35,14 @@ class FoodLayout extends StatelessWidget {
                         foodItem.img,
                         fit: BoxFit.cover,
                       ))),
-
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left:11.0),
+                  padding: const EdgeInsets.only(left: 11.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(top:8.0,bottom: 5),
+                        padding: const EdgeInsets.only(top: 8.0, bottom: 5),
                         child: Text(
                           foodItem.desc + '\n' + 'NGN' + foodItem.price,
                           style: GoogleFonts.asap(
@@ -53,20 +52,27 @@ class FoodLayout extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical:8.0),
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: InkWell(
                             onTap: () {
-                             appstate.addToCart(CartItem(foodItem,1)).then((value) {
-                               if(value){
-                                 appstate.showToast(context, 'Food added to cart', snackaction: (){
-                                   Scaffold.of(context).hideCurrentSnackBar;
-                                   Navigator.push(context, MaterialPageRoute(builder: (_)=> Cart()));
-                                 });
-                               }else{
-                                 Fluttertoast.showToast(msg: 'Item already added');
-                               }
-                             });
-
+                              appstate
+                                  .addToCart(CartItem(foodItem, 1))
+                                  .then((value) {
+                                if (value) {
+                                  appstate
+                                      .showToast(context, 'Food added to cart',
+                                          snackaction: () {
+                                    Scaffold.of(context).hideCurrentSnackBar;
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => Cart()));
+                                  });
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: 'Item already added');
+                                }
+                              });
                             },
                             child: Text(
                               'ADD TO CART',
@@ -82,7 +88,6 @@ class FoodLayout extends StatelessWidget {
               )
             ],
           ),
-
         ),
       ),
     );

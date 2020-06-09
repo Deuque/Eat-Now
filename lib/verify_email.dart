@@ -8,16 +8,15 @@ import 'package:provider/provider.dart';
 
 import 'models/MyServices.dart';
 
-class VerifyEmail extends StatefulWidget{
+class VerifyEmail extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
     return MyState();
   }
-
 }
 
-class MyState extends State<VerifyEmail>{
+class MyState extends State<VerifyEmail> {
   var text = 'Verify Email Address';
 
   @override
@@ -33,7 +32,7 @@ class MyState extends State<VerifyEmail>{
               width: double.infinity,
               child: Image.asset('assets/verify_img.jpg')),
           Padding(
-            padding: const EdgeInsets.only(top:25,bottom: 10.0),
+            padding: const EdgeInsets.only(top: 25, bottom: 10.0),
             child: Text(
               'Before you eat!',
               style: GoogleFonts.dancingScript(
@@ -57,7 +56,9 @@ class MyState extends State<VerifyEmail>{
 //          Expanded(
 //            child: Container(),
 //          ),
-          SizedBox(height: 35,),
+          SizedBox(
+            height: 35,
+          ),
           Container(
             width: double.infinity,
             alignment: Alignment.center,
@@ -75,14 +76,17 @@ class MyState extends State<VerifyEmail>{
                       fontWeight: FontWeight.w300,
                       fontSize: 16),
                 ),
-                onPressed: () async{
-                  if(text.contains('verified')){
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> Login()));
+                onPressed: () async {
+                  if (text.contains('verified')) {
+                    Navigator.pushReplacement(
+                        context, MaterialPageRoute(builder: (_) => Login()));
                     return;
                   }
                   try {
                     pr.show();
-                    await appstate.getUser.sendEmailVerification().then((value){
+                    await appstate.getUser
+                        .sendEmailVerification()
+                        .then((value) {
                       Fluttertoast.showToast(msg: 'Verification Link sent');
                       pr.hide();
                       setState(() {
@@ -94,10 +98,7 @@ class MyState extends State<VerifyEmail>{
                     Fluttertoast.showToast(msg: 'An error occured');
                     print(e.message);
                   }
-                }
-
-            ),
-
+                }),
           ),
           Container(
             width: double.infinity,
@@ -117,17 +118,13 @@ class MyState extends State<VerifyEmail>{
                       fontWeight: FontWeight.w300,
                       fontSize: 16),
                 ),
-                onPressed: () =>
-                FirebaseAuth.instance.signOut()
-
-
-            ),
-
+                onPressed: () => FirebaseAuth.instance.signOut()),
           ),
-        SizedBox(height: 15,)
+          SizedBox(
+            height: 15,
+          )
         ],
       ),
     );
   }
-
 }

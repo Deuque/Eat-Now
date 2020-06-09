@@ -19,7 +19,7 @@ class MyState extends State<Profile> {
   bool checkedValue = true;
   List cartitems = [];
   List choices = ['Edit Profile'];
-  double percent=40;
+  double percent = 40;
 
   BasicInfo basicInfo;
   PersonalInfo personalInfo;
@@ -45,7 +45,7 @@ class MyState extends State<Profile> {
           ),
           actions: <Widget>[
             PopupMenuButton<String>(
-              onSelected: (choice){},
+              onSelected: (choice) {},
               itemBuilder: (BuildContext context) {
                 return choices.map((choice) {
                   return PopupMenuItem<String>(
@@ -68,110 +68,125 @@ class MyState extends State<Profile> {
                 pinned: false,
                 flexibleSpace: FlexibleSpaceBar(
                     background: //
-                    Container(
-                      width: double.maxFinite,
-                      padding: const EdgeInsets.symmetric(vertical:8.0,horizontal: 11),
-                      child: Column(
-                        children: <Widget>[
-                          InkWell(
-                            child: CircleAvatar(
-                                radius: 30,
-                                backgroundColor: appstate.aux2,
-                                child: Center(
-                                  child: Icon(Icons.person,color: appstate.aux1,),
-                                )),
-                          ),
-                          SizedBox(height: 3,),
-                          Text(
-                            basicInfo.fname,
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.asap(
-                                color: appstate.aux2,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20),
-                          ),
-                          SizedBox(height: 2,),
-                          Text(
-                            '${personalInfo.state}, ${personalInfo.country}',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.asap(
-                                color: appstate.aux2,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14),
-                          ),
-                          SizedBox(height: 7,),
-                          Padding(
-
-                            padding: const EdgeInsets.all(14.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                displayItems(title: '14',subtitle: 'Orders',),
-                                Container(
-                                  height: 35,
-                                  width: 1,color: appstate.aux8,
-                                ),
-                                displayItems(title: '7000',subtitle: 'Food Credit',),
-                                Container(
-                                  height: 35,
-                                  width: 1,color: appstate.aux8,
-                                ),
-                                displayItems(title: '3000',subtitle: 'Credit Used',),
-                              ],
-                            ),
-                          ),
-                          RoundedProgressBar(
-                            height: 9,
-                            style: RoundedProgressBarStyle(
-                                borderWidth: 0,
-                                widthShadow: 0,
-                            colorProgress: appstate.aux22,
-                            backgroundProgress: appstate.aux3
-                            ),
-                            margin: EdgeInsets.only(top: 8,left: 8,right:8,bottom: 2),
-                            borderRadius: BorderRadius.circular(24),
-                            percent: percent,
-                          ),
-                          Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.only(right: 6,top: 2,bottom: 8),
-                            child: Text(
-                              'Credit Bar',
-                              textAlign: TextAlign.end,
-                              style: GoogleFonts.asap(
-                                  color: appstate.aux2,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 12),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 4),
-                            width: double.infinity,
-                            height: 35,
-                            child: RaisedButton(
-                                shape: new RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(4.0),
-                                ),
-                                color: appstate.aux2,
-                                elevation: 3.0,
-                                child: Text(
-                                  'PAY BACK',
-                                  style: GoogleFonts.asap(
-                                      color: appstate.aux1,
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 14),
-                                ),
-                                onPressed: (){}
-
-                            ),
-
-                          )
-                        ],
+                        Container(
+                  width: double.maxFinite,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 11),
+                  child: Column(
+                    children: <Widget>[
+                      InkWell(
+                        child: CircleAvatar(
+                            radius: 30,
+                            backgroundColor: appstate.aux2,
+                            child: Center(
+                              child: Icon(
+                                Icons.person,
+                                color: appstate.aux1,
+                              ),
+                            )),
                       ),
-                    )
-                ),
+                      SizedBox(
+                        height: 3,
+                      ),
+                      Text(
+                        basicInfo.fname,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.asap(
+                            color: appstate.aux2,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20),
+                      ),
+                      SizedBox(
+                        height: 2,
+                      ),
+                      Text(
+                        '${personalInfo.state}, ${personalInfo.country}',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.asap(
+                            color: appstate.aux2,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14),
+                      ),
+                      SizedBox(
+                        height: 7,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            displayItems(
+                              title: '14',
+                              subtitle: 'Orders',
+                            ),
+                            Container(
+                              height: 35,
+                              width: 1,
+                              color: appstate.aux8,
+                            ),
+                            displayItems(
+                              title: '7000',
+                              subtitle: 'Food Credit',
+                            ),
+                            Container(
+                              height: 35,
+                              width: 1,
+                              color: appstate.aux8,
+                            ),
+                            displayItems(
+                              title: '3000',
+                              subtitle: 'Credit Used',
+                            ),
+                          ],
+                        ),
+                      ),
+                      RoundedProgressBar(
+                        height: 9,
+                        style: RoundedProgressBarStyle(
+                            borderWidth: 0,
+                            widthShadow: 0,
+                            colorProgress: appstate.aux22,
+                            backgroundProgress: appstate.aux3),
+                        margin: EdgeInsets.only(
+                            top: 8, left: 8, right: 8, bottom: 2),
+                        borderRadius: BorderRadius.circular(24),
+                        percent: percent,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.only(right: 6, top: 2, bottom: 8),
+                        child: Text(
+                          'Credit Bar',
+                          textAlign: TextAlign.end,
+                          style: GoogleFonts.asap(
+                              color: appstate.aux2,
+                              fontWeight: FontWeight.w300,
+                              fontSize: 12),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 4),
+                        width: double.infinity,
+                        height: 35,
+                        child: RaisedButton(
+                            shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(4.0),
+                            ),
+                            color: appstate.aux2,
+                            elevation: 3.0,
+                            child: Text(
+                              'PAY BACK',
+                              style: GoogleFonts.asap(
+                                  color: appstate.aux1,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 14),
+                            ),
+                            onPressed: () {}),
+                      )
+                    ],
+                  ),
+                )),
               ),
-
               SliverPersistentHeader(
                 delegate: _SliverTextDelegate(
                   Text(
@@ -187,15 +202,12 @@ class MyState extends State<Profile> {
               ),
             ];
           },
-
-          body:
-          ListView(
+          body: ListView(
             children: <Widget>[
               for (final item in appstate.foodlist) FoodLayout(item)
             ],
           ),
-        )
-    );
+        ));
   }
 }
 
@@ -211,8 +223,8 @@ class _SliverTextDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => 42;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset,
-      bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     var appstate = Provider.of<MyService>(context, listen: true);
     return new Container(
       color: appstate.aux1,
@@ -228,7 +240,7 @@ class _SliverTextDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
-class displayItems extends StatelessWidget{
+class displayItems extends StatelessWidget {
   final title;
   final subtitle;
 
@@ -236,7 +248,7 @@ class displayItems extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    var appstate = Provider.of<MyService>(context,listen: true);
+    var appstate = Provider.of<MyService>(context, listen: true);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -245,22 +257,18 @@ class displayItems extends StatelessWidget{
           title,
           textAlign: TextAlign.center,
           style: GoogleFonts.asap(
-              color: appstate.aux2,
-              fontWeight: FontWeight.w400,
-              fontSize: 19),
+              color: appstate.aux2, fontWeight: FontWeight.w400, fontSize: 19),
         ),
-        SizedBox(height: 3,),
+        SizedBox(
+          height: 3,
+        ),
         Text(
           subtitle,
           textAlign: TextAlign.center,
           style: GoogleFonts.asap(
-              color: appstate.aux4,
-              fontWeight: FontWeight.w400,
-              fontSize: 13),
+              color: appstate.aux4, fontWeight: FontWeight.w400, fontSize: 13),
         ),
       ],
     );
   }
-
 }
-

@@ -17,12 +17,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 //
 class CrudOperations {
-
   static Future<ApiResponse<AuthResult>> createUser(User userModel) async {
     ApiResponse<AuthResult> response;
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(
-            email: userModel.basicInfo.email, password: userModel.basicInfo.password)
+            email: userModel.basicInfo.email,
+            password: userModel.basicInfo.password)
         .then((result) {
       response = new ApiResponse(data: result, error: false, errorMessage: '');
     }).catchError((e) {
@@ -32,7 +32,7 @@ class CrudOperations {
     return response;
   }
 
-  static Future<ApiResponse<bool>> uploadData(String uid, User user) async{
+  static Future<ApiResponse<bool>> uploadData(String uid, User user) async {
     ApiResponse<bool> response;
     await FirebaseDatabase.instance
         .reference()
@@ -40,11 +40,10 @@ class CrudOperations {
         .child(uid)
         .set(user.toMap())
         .then((value) {
-      response =
-      new ApiResponse(data: true, error: false, errorMessage: '');
+      response = new ApiResponse(data: true, error: false, errorMessage: '');
     }).catchError((e) {
-      response = new ApiResponse(
-          data: false, error: true, errorMessage: e.toString());
+      response =
+          new ApiResponse(data: false, error: true, errorMessage: e.toString());
     });
     return response;
   }
@@ -63,10 +62,6 @@ class CrudOperations {
     return response;
   }
 
-
-
-
-
 //  static Future<ApiResponse<bool>> uploadStory(StoryModel data) async {
 //    ApiResponse<bool> response;
 //    await FirebaseDatabase.instance
@@ -82,6 +77,5 @@ class CrudOperations {
 //    });
 //    return response;
 //  }
-
 
 }

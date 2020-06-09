@@ -1,12 +1,10 @@
-
-import 'package:eat_now/navigations/cart.dart';
 import 'package:eat_now/navigations/food_layout.dart';
 import 'package:eat_now/navigations/nav_items.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
 import '../models/MyServices.dart';
 
 class PageHolder extends StatefulWidget {
@@ -94,7 +92,6 @@ class MyState extends State<PageHolder> {
                   ),
                 ),
               ),
-
               SliverPersistentHeader(
                 delegate: _SliverTextDelegate(
                   Text(
@@ -110,15 +107,12 @@ class MyState extends State<PageHolder> {
               ),
             ];
           },
-
-          body:
-          ListView(
+          body: ListView(
             children: <Widget>[
               for (final item in appstate.foodlist) FoodLayout(item)
             ],
           ),
         ),
-
         drawer: Drawer(
           child: drawerItems,
         ),
@@ -145,7 +139,7 @@ class _SliverTextDelegate extends SliverPersistentHeaderDelegate {
     return new Container(
       color: appstate.aux1,
       alignment: Alignment.centerLeft,
-              padding: EdgeInsets.only(left:15.0,top: 20,bottom: 10),
+      padding: EdgeInsets.only(left: 15.0, top: 20, bottom: 10),
       child: _text,
     );
   }

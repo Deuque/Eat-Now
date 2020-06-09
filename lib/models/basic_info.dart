@@ -1,5 +1,5 @@
-class BasicInfo{
-  String email,fname,password;
+class BasicInfo {
+  String email, fname, password;
 
   BasicInfo({this.email, this.fname, this.password});
 
@@ -10,10 +10,10 @@ class BasicInfo{
     );
   }
 
-  Map<String, dynamic> toMap(){
+  Map<String, dynamic> toMap() {
     return {
-    'email': this.email,
-    'fname': this.fname,
+      'email': this.email,
+      'fname': this.fname,
     };
   }
 }

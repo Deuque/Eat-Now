@@ -5,11 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'validation/login.dart';
 
 import 'models/MyServices.dart';
+import 'validation/login.dart';
 
-class ValType extends StatelessWidget{
+class ValType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appstate = Provider.of<MyService>(context, listen: true);
@@ -26,7 +26,8 @@ class ValType extends StatelessWidget{
                 fit: BoxFit.cover,
               ),
             ),
-            child: ClipRRect( // make sure we apply clip it properly
+            child: ClipRRect(
+              // make sure we apply clip it properly
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
                 child: Container(
@@ -36,13 +37,12 @@ class ValType extends StatelessWidget{
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(30.0),
                     child: Text(
-                      "We believe everyone deserves a meal when hungry, so go ahead and order a meal...",
+                        "We believe everyone deserves a meal when hungry, so go ahead and order a meal...",
                         textAlign: TextAlign.center,
                         style: GoogleFonts.asap(
                             color: appstate.aux1,
                             fontWeight: FontWeight.w200,
-                            fontSize: 16)
-                    ),
+                            fontSize: 16)),
                   ),
                 ),
               ),
@@ -59,30 +59,28 @@ class ValType extends StatelessWidget{
                       fontWeight: FontWeight.w300,
                       fontSize: 16),
                 ),
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => Login())),
+                onPressed: () => Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => Login())),
               ),
               Container(
                 width: double.infinity,
                 height: 68,
                 padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 15.0),
                 child: RaisedButton(
-                  shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(6.0),
-                  ),
-                  color: appstate.aux2,
-                  elevation: 3.0,
-                  child: Text(
-                    'LET\'S START',
-                    style: GoogleFonts.asap(
-                        color: appstate.aux1,
-                        fontWeight: FontWeight.w300,
-                        fontSize: 14),
-                  ),
-                  onPressed: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => Register()))
-
-                ),
-
+                    shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(6.0),
+                    ),
+                    color: appstate.aux2,
+                    elevation: 3.0,
+                    child: Text(
+                      'LET\'S START',
+                      style: GoogleFonts.asap(
+                          color: appstate.aux1,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 14),
+                    ),
+                    onPressed: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => Register()))),
               )
             ],
           )
@@ -90,5 +88,4 @@ class ValType extends StatelessWidget{
       ),
     );
   }
-  
 }

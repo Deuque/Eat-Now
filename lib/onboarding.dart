@@ -33,7 +33,7 @@ class MyState extends State<Onboarding> {
       children: <Widget>[
         Container(
           height: 300,
-          padding: EdgeInsets.only(top:5.0),
+          padding: EdgeInsets.only(top: 5.0),
           child: CarouselSlider.builder(
             carouselController: buttonCarouselController,
             options: CarouselOptions(
@@ -66,19 +66,25 @@ class MyState extends State<Onboarding> {
             ),
           ),
         ),
-       AnimatedSwitcher(duration: Duration(milliseconds: 500),
-         switchInCurve: Curves.fastOutSlowIn,
-         transitionBuilder: (Widget child, Animation<double> animation) {
-           return ScaleTransition(child: child, scale: animation,);
-         }
-         ,child: changing_text,),
+        AnimatedSwitcher(
+          duration: Duration(milliseconds: 500),
+          switchInCurve: Curves.fastOutSlowIn,
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return ScaleTransition(
+              child: child,
+              scale: animation,
+            );
+          },
+          child: changing_text,
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               FlatButton(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_)=> ValType())),
+                onPressed: () => Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => ValType())),
                 child: Text(
                   'SKIP',
                   style: GoogleFonts.asap(
@@ -92,7 +98,7 @@ class MyState extends State<Onboarding> {
                 children: items.map((url) {
                   int index = items.indexOf(url);
                   return Container(
-                    width: _current == index ?21.0:17.0,
+                    width: _current == index ? 21.0 : 17.0,
                     height: 3.0,
                     margin:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
@@ -123,24 +129,24 @@ class MyState extends State<Onboarding> {
   }
 }
 
-
 class NewWidget extends StatefulWidget {
-
   var index;
+
   NewWidget(this.index) : super(key: ValueKey(index));
 
   @override
   State<StatefulWidget> createState() {
-   return MyState2();
+    return MyState2();
   }
 }
 
-class MyState2 extends State<NewWidget>{
+class MyState2 extends State<NewWidget> {
   List items = sampleCaroussels;
+
   @override
   Widget build(BuildContext context) {
     var appstate = Provider.of<MyService>(context, listen: true);
-    var index=widget.index;
+    var index = widget.index;
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
@@ -169,7 +175,4 @@ class MyState2 extends State<NewWidget>{
       ),
     );
   }
-
 }
-
-
