@@ -1,6 +1,6 @@
 # eat_now
 
-Eat now, pay later
+Eat now, pay later (Under Construction)
 
 ## Getting Started
 
