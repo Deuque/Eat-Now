@@ -1,21 +1,24 @@
-import 'package:eat_now/models/MyServices.dart';
+
+import 'package:eat_now/services/RxServices.dart';
+import 'package:eat_now/services/auxilliary.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../models/cart_item.dart';
-
+import '../services/MyServices.dart';
 import '../models/food_item.dart';
 
 class CartItemLayout extends StatelessWidget {
   CartItem cartItem;
+//  RxServices get appstate => GetIt.I<RxServices>();
 
   CartItemLayout(this.cartItem);
 
   @override
   Widget build(BuildContext context) {
-    var appstate = Provider.of<MyService>(context, listen: true);
-
+    var appstate = Provider.of<MyService>(context,listen:true);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5.0),
       child: Card(
@@ -34,14 +37,14 @@ class CartItemLayout extends StatelessWidget {
                       '‎NGN' +
                       cartItem.foodItem.price,
                   style: GoogleFonts.asap(
-                      color: appstate.aux6,
+                      color: aux6,
                       fontWeight: FontWeight.w400,
                       fontSize: 15),
                 ),
               ),
               Divider(
                 height: 1,
-                color: appstate.aux8,
+                color: aux8,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -54,7 +57,7 @@ class CartItemLayout extends StatelessWidget {
                           Text(
                             'QTY: ',
                             style: GoogleFonts.asap(
-                                color: appstate.aux6,
+                                color: aux6,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 13),
                           ),
@@ -64,13 +67,13 @@ class CartItemLayout extends StatelessWidget {
                             },
                             icon: Icon(
                               Icons.remove_circle,
-                              color: appstate.aux3,
+                              color: aux3,
                             ),
                           ),
                           Text(
                             cartItem.qty.toString(),
                             style: GoogleFonts.asap(
-                                color: appstate.aux6,
+                                color: aux6,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 13),
                           ),
@@ -80,7 +83,7 @@ class CartItemLayout extends StatelessWidget {
                             },
                             icon: Icon(
                               Icons.add_circle,
-                              color: appstate.aux3,
+                              color: aux3,
                             ),
                           ),
                         ],
@@ -89,7 +92,7 @@ class CartItemLayout extends StatelessWidget {
                     iconSize: 20,
                     icon: Image.asset(
                       'assets/delete.png',
-                      color: appstate.aux2,
+                      color: aux2,
                       height: 16,
                       width: 16,
                     ),

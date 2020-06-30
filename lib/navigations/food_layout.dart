@@ -1,4 +1,4 @@
-import 'package:eat_now/models/MyServices.dart';
+import '../services/MyServices.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,7 +32,7 @@ class FoodLayout extends StatelessWidget {
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(4.0),
                       child: Image.asset(
-                        foodItem.img,
+                        foodItem.imgUrl,
                         fit: BoxFit.cover,
                       ))),
               Expanded(

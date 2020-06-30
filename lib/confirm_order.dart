@@ -2,18 +2,22 @@ import 'package:eat_now/models/basic_info.dart';
 import 'package:eat_now/models/delivery_item.dart';
 import 'package:eat_now/models/personal_info.dart';
 import 'package:eat_now/paystack_payment.dart';
+import 'package:eat_now/services/RxServices.dart';
+import 'package:eat_now/services/auxilliary.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import 'models/MyServices.dart';
+import 'services/MyServices.dart';
 
 class ConfirmOrder extends StatefulWidget {
   State<ConfirmOrder> createState() => MyState();
 }
 
 class MyState extends State<ConfirmOrder> {
+  RxServices get service => GetIt.I<RxServices>();
   int _totalPrice = 0;
   int _totalPrice1=0;
   List cartitems = [];
@@ -27,14 +31,14 @@ class MyState extends State<ConfirmOrder> {
   Widget build(BuildContext context) {
     var appstate = Provider.of<MyService>(context, listen: true);
     cartitems = appstate.getCartList();
-    basicInfo = appstate.myUser.basicInfo;
-    personalInfo = appstate.myUser.personalInfo;
+    basicInfo = service.myUser.basicInfo;
+    personalInfo = service.myUser.personalInfo;
 
     address ='${basicInfo.fname.toUpperCase()}\n${personalInfo.num}\n${personalInfo.address}, ${personalInfo.city}, ${personalInfo.state}, ${personalInfo.country}\n';
 
     _foodDetails = '';
     _totalPrice = 0;
-    for (final item in appstate.getCartList()) {
+    for (final item in cartitems) {
       _totalPrice = _totalPrice + (int.parse(item.foodItem.price) * item.qty);
       _foodDetails =
           _foodDetails + '${item.qty} plate(s) of ' + item.foodItem.desc + '\n';
@@ -50,14 +54,14 @@ class MyState extends State<ConfirmOrder> {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: appstate.aux1,
-          iconTheme: IconThemeData(color: appstate.aux2),
+          backgroundColor: aux1,
+          iconTheme: IconThemeData(color: aux2),
           elevation: 0,
           centerTitle: true,
           title: Text(
             'CONFIRM ORDER',
             style: GoogleFonts.roboto(
-                color: appstate.aux2,
+                color: aux2,
                 fontWeight: FontWeight.w900,
                 fontSize: 15),
           ),
@@ -104,17 +108,17 @@ class MyState extends State<ConfirmOrder> {
               width: double.infinity,
               height: 50,
               child: FlatButton(
-                color: appstate.aux2,
+                color: aux2,
                 onPressed: () {
                   DeliveryItem ditem = new DeliveryItem(items: _foodDetails,type: _radioValue1==1?'Company Delivery':'Pick up at station',
                   amount: _totalPrice1, address: address, isDone: false);
                   Navigator.push(context, MaterialPageRoute(builder: (_)=>PaystackPayment(ditem: ditem,email: basicInfo.email,)));
                 },
                 child: Text(
-                  'PAY NGN${appstate.moneyResolver('$_totalPrice1')}',
+                  'PAY NGN${moneyResolver('$_totalPrice1')}',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.sourceSansPro(
-                      color: appstate.aux1,
+                      color: aux1,
                       fontWeight: FontWeight.w500,
                       fontSize: 16),
                 ),
@@ -140,7 +144,6 @@ class buildCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appstate = Provider.of<MyService>(context, listen: true);
 
     return Card(
       elevation: 3,
@@ -155,7 +158,7 @@ class buildCard extends StatelessWidget {
                   Text(
                     title,
                     style: GoogleFonts.sourceSansPro(
-                        color: appstate.aux4,
+                        color: aux4,
                         fontWeight: FontWeight.w500,
                         fontSize: 14),
                   ),
@@ -167,7 +170,7 @@ class buildCard extends StatelessWidget {
                         trailer ?? '',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.sourceSansPro(
-                            color: appstate.aux77,
+                            color: aux77,
                             fontWeight: FontWeight.w500,
                             fontSize: 15),
                       ),
@@ -177,7 +180,7 @@ class buildCard extends StatelessWidget {
               ),
               Divider(
                 height: 1,
-                color: appstate.aux4,
+                color: aux4,
               ),
               isRadio
                   ? radioItems
@@ -192,7 +195,7 @@ class buildCard extends StatelessWidget {
                             subtitle ?? '',
                             textAlign: TextAlign.start,
                             style: GoogleFonts.sourceSansPro(
-                                color: appstate.aux6,
+                                color: aux6,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16),
                           ),
@@ -214,7 +217,6 @@ class radioButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appstate = Provider.of<MyService>(context, listen: true);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
@@ -223,13 +225,11 @@ class radioButtons extends StatelessWidget {
           groupValue: groupValue,
           onChanged: valueChanged,
         ),
-        SizedBox(
-          width: 7,
-        ),
+
         Text(
           title,
           style: GoogleFonts.sourceSansPro(
-              color: appstate.aux6, fontWeight: FontWeight.w500, fontSize: 16),
+              color: aux6, fontWeight: FontWeight.w500, fontSize: 16),
         )
       ],
     );

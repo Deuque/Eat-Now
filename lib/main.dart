@@ -1,16 +1,19 @@
-import 'package:eat_now/onboarding.dart';
-import 'package:eat_now/verify_email.dart';
+import 'file:///C:/Users/user/Desktop/Flutter%20Projects/eat_now/lib/initial_pages/onboarding.dart';
+import 'file:///C:/Users/user/Desktop/Flutter%20Projects/eat_now/lib/initial_pages/verify_email.dart';
+import 'package:eat_now/services/RxServices.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
-import 'AuthListener.dart';
-import 'models/MyServices.dart';
+import 'initial_pages/AuthListener.dart';
+import 'services/MyServices.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => MyService()),
   ], child: MyApp()));
+  GetIt.I.registerSingleton<RxServices>(RxServices());
 }
 
 class MyApp extends StatelessWidget {

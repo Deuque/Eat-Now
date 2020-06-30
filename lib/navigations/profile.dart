@@ -1,13 +1,20 @@
+import 'package:eat_now/initial_pages/validation_type.dart';
 import 'package:eat_now/models/basic_info.dart';
 import 'package:eat_now/models/personal_info.dart';
+import 'package:eat_now/services/RxServices.dart';
+import 'package:eat_now/services/auxilliary.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import '../models/MyServices.dart';
+import '../services/MyServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'cart_item_layout.dart';
+import 'delivery_layout.dart';
+import 'fade_route.dart';
 import 'food_layout.dart';
 
 class Profile extends StatefulWidget {
@@ -15,10 +22,11 @@ class Profile extends StatefulWidget {
 }
 
 class MyState extends State<Profile> {
+  RxServices get service => GetIt.I<RxServices>();
   int _totalPrice = 0;
   bool checkedValue = true;
   List cartitems = [];
-  List choices = ['Edit Profile'];
+  List choices = ['Edit Profile','Logout'];
   double percent = 40;
 
   BasicInfo basicInfo;
@@ -26,26 +34,31 @@ class MyState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    var appstate = Provider.of<MyService>(context, listen: true);
-    basicInfo = appstate.myUser.basicInfo;
-    personalInfo = appstate.myUser.personalInfo;
+    basicInfo = service.myUser.basicInfo;
+    personalInfo = service.myUser.personalInfo;
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: appstate.aux1,
-          iconTheme: IconThemeData(color: appstate.aux2),
+          backgroundColor: aux1,
+          iconTheme: IconThemeData(color: aux2),
           elevation: 1,
           centerTitle: true,
           title: Text(
             'PROFILE',
             style: GoogleFonts.roboto(
-                color: appstate.aux2,
+                color: aux2,
                 fontWeight: FontWeight.w900,
                 fontSize: 15),
           ),
           actions: <Widget>[
             PopupMenuButton<String>(
-              onSelected: (choice) {},
+              onSelected: (choice) {
+                if(choice=='Logout'){
+                  FirebaseAuth.instance.signOut().then((value) {
+                    Navigator.pushReplacement(context, FadeRoute(page: ValType()));
+                  });
+                }
+              },
               itemBuilder: (BuildContext context) {
                 return choices.map((choice) {
                   return PopupMenuItem<String>(
@@ -62,7 +75,7 @@ class MyState extends State<Profile> {
             return <Widget>[
               SliverAppBar(
                 leading: Container(),
-                backgroundColor: appstate.aux1,
+                backgroundColor: aux1,
                 expandedHeight: 260.0,
                 floating: false,
                 pinned: false,
@@ -77,11 +90,11 @@ class MyState extends State<Profile> {
                       InkWell(
                         child: CircleAvatar(
                             radius: 30,
-                            backgroundColor: appstate.aux2,
+                            backgroundColor: aux2,
                             child: Center(
                               child: Icon(
                                 Icons.person,
-                                color: appstate.aux1,
+                                color: aux1,
                               ),
                             )),
                       ),
@@ -92,7 +105,7 @@ class MyState extends State<Profile> {
                         basicInfo.fname,
                         textAlign: TextAlign.center,
                         style: GoogleFonts.asap(
-                            color: appstate.aux2,
+                            color: aux2,
                             fontWeight: FontWeight.w600,
                             fontSize: 20),
                       ),
@@ -103,7 +116,7 @@ class MyState extends State<Profile> {
                         '${personalInfo.state}, ${personalInfo.country}',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.asap(
-                            color: appstate.aux2,
+                            color: aux2,
                             fontWeight: FontWeight.w400,
                             fontSize: 14),
                       ),
@@ -122,7 +135,7 @@ class MyState extends State<Profile> {
                             Container(
                               height: 35,
                               width: 1,
-                              color: appstate.aux8,
+                              color: aux8,
                             ),
                             displayItems(
                               title: '7000',
@@ -131,7 +144,7 @@ class MyState extends State<Profile> {
                             Container(
                               height: 35,
                               width: 1,
-                              color: appstate.aux8,
+                              color: aux8,
                             ),
                             displayItems(
                               title: '3000',
@@ -145,8 +158,8 @@ class MyState extends State<Profile> {
                         style: RoundedProgressBarStyle(
                             borderWidth: 0,
                             widthShadow: 0,
-                            colorProgress: appstate.aux22,
-                            backgroundProgress: appstate.aux3),
+                            colorProgress: aux22,
+                            backgroundProgress: aux3),
                         margin: EdgeInsets.only(
                             top: 8, left: 8, right: 8, bottom: 2),
                         borderRadius: BorderRadius.circular(24),
@@ -159,7 +172,7 @@ class MyState extends State<Profile> {
                           'Credit Bar',
                           textAlign: TextAlign.end,
                           style: GoogleFonts.asap(
-                              color: appstate.aux2,
+                              color: aux2,
                               fontWeight: FontWeight.w300,
                               fontSize: 12),
                         ),
@@ -172,12 +185,12 @@ class MyState extends State<Profile> {
                             shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(4.0),
                             ),
-                            color: appstate.aux2,
+                            color: aux2,
                             elevation: 3.0,
                             child: Text(
                               'PAY BACK',
                               style: GoogleFonts.asap(
-                                  color: appstate.aux1,
+                                  color: aux1,
                                   fontWeight: FontWeight.w300,
                                   fontSize: 14),
                             ),
@@ -193,7 +206,7 @@ class MyState extends State<Profile> {
                     'ORDER HISTORY',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.asap(
-                        color: appstate.aux2,
+                        color: aux2,
                         fontWeight: FontWeight.w500,
                         fontSize: 15),
                   ),
@@ -204,7 +217,6 @@ class MyState extends State<Profile> {
           },
           body: ListView(
             children: <Widget>[
-              for (final item in appstate.foodlist) FoodLayout(item)
             ],
           ),
         ));
@@ -227,7 +239,7 @@ class _SliverTextDelegate extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     var appstate = Provider.of<MyService>(context, listen: true);
     return new Container(
-      color: appstate.aux1,
+      color: aux1,
       alignment: Alignment.centerLeft,
       padding: EdgeInsets.only(left: 15.0),
       child: _text,
@@ -257,7 +269,7 @@ class displayItems extends StatelessWidget {
           title,
           textAlign: TextAlign.center,
           style: GoogleFonts.asap(
-              color: appstate.aux2, fontWeight: FontWeight.w400, fontSize: 19),
+              color: aux2, fontWeight: FontWeight.w400, fontSize: 19),
         ),
         SizedBox(
           height: 3,
@@ -266,7 +278,7 @@ class displayItems extends StatelessWidget {
           subtitle,
           textAlign: TextAlign.center,
           style: GoogleFonts.asap(
-              color: appstate.aux4, fontWeight: FontWeight.w400, fontSize: 13),
+              color: aux4, fontWeight: FontWeight.w400, fontSize: 13),
         ),
       ],
     );

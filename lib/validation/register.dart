@@ -1,14 +1,18 @@
-import 'package:eat_now/AuthListener.dart';
-import 'package:eat_now/models/UserModel.dart';
 import 'package:eat_now/models/basic_info.dart';
 import 'package:eat_now/models/personal_info.dart';
+import 'package:eat_now/models/user_model.dart';
+import 'package:eat_now/services/auxilliary.dart';
 import 'package:eat_now/validation/register_forms.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../Crud.dart';
-import '../models/MyServices.dart';
-import 'package:provider/provider.dart';
+
+import '../initial_pages/AuthListener.dart';
+import '../services/ApiService.dart';
+import '../services/Crud.dart';
+import '../services/city_model.dart';
+import '../services/country_model.dart';
+import '../services/state_model.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -21,7 +25,12 @@ class Register extends StatefulWidget {
 class MyState extends State<Register> {
   var _name, _email, _password;
   var _dob, _country, _state, _city, _address, _occupation, _num;
+  List<CountryModel> countries = [];
+  List<StateModel> states = [];
+  List<CityModel> cities = [];
+  var selCountry, selState;
   final formkey = new GlobalKey<FormState>();
+  ApiService apiService = new ApiService();
 
   checkFields() {
     final form = formkey.currentState;
@@ -33,10 +42,20 @@ class MyState extends State<Register> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var appstate = Provider.of<MyService>(context, listen: true);
+  void initState() {
+    apiService.getCountries().then((value) {
+      if (!value.error) {
+        setState(() {
+          countries = value.data;
+        });
+      }
+    });
+    super.initState();
+  }
 
-    var pr = appstate.getDialog(context);
+  @override
+  Widget build(BuildContext context) {
+    var pr = getDialog(context);
 
     createUser() async {
       if (checkFields()) {
@@ -53,18 +72,21 @@ class MyState extends State<Register> {
                 occupation: _occupation,
                 num: _num));
 
-        CrudOperations.createUser(user).then((result) {
+        CrudOperations.createUser(user.basicInfo.email, user.basicInfo.password)
+            .then((result) {
           if (result.error) {
             pr.hide();
             Fluttertoast.showToast(
                 msg: 'Register Error: ' + result.errorMessage,
                 toastLength: Toast.LENGTH_LONG);
           } else {
-            CrudOperations.uploadData(result.data.user.uid, user).then((value) {
+            CrudOperations.uploadData(result.data.user.uid, 'user', user)
+                .then((value) {
               pr.hide();
               if (value.data) {
-                Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (_) => AuthListener()));
+                CrudOperations.setRole('user');
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                    AuthListener()), (Route<dynamic> route) => false);
               } else {
                 Fluttertoast.showToast(
                     msg: 'Upload Error: ' + result.errorMessage,
@@ -76,14 +98,16 @@ class MyState extends State<Register> {
       }
     }
 
+    EdgeInsetsGeometry myPadding =
+        EdgeInsets.symmetric(horizontal: 18, vertical: 20);
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: appstate.aux2,
+          backgroundColor: aux2,
           elevation: 0,
         ),
         body: ListView(children: <Widget>[
           Container(
-            color: appstate.aux2,
+            color: aux2,
             height: 110,
             width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal: 40),
@@ -92,18 +116,14 @@ class MyState extends State<Register> {
                 Text(
                   'Register',
                   style: GoogleFonts.dancingScript(
-                      color: appstate.aux1,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 38),
+                      color: aux1, fontWeight: FontWeight.w700, fontSize: 38),
                 ),
                 SizedBox(height: 5),
                 Text(
                   'Enter your information correctly, so we get to know you better',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.asap(
-                      color: appstate.aux1,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 15),
+                      color: aux1, fontWeight: FontWeight.w400, fontSize: 15),
                 ),
               ],
             ),
@@ -111,84 +131,148 @@ class MyState extends State<Register> {
           Form(
               key: formkey,
               child: Container(
-                padding: EdgeInsets.all(15.0),
-                color: appstate.aux5,
+                color: aux41,
                 child: Column(
                   children: <Widget>[
-                    RegForms(
-                      label: 'Full Name',
-                      resolvetext: (value) => _name = value,
-                      isPassword: false,
+                    Container(
+                      color: aux1,
+                      padding: myPadding,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text(
+                              'Basic Details',
+                              style: GoogleFonts.asap(
+                                  color: aux2,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 17),
+                            ),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            RegForms(
+                              label: 'Full Name',
+                              resolvetext: (value) => _name = value,
+                              isPassword: false,
+                            ),
+                            RegForms(
+                              label: 'Email',
+                              resolvetext: (value) => _email = value,
+                              isPassword: false,
+                            ),
+                            RegForms(
+                              label: 'Password',
+                              resolvetext: (value) => _password = value,
+                              isPassword: true,
+                            ),
+                          ]),
                     ),
-                    RegForms(
-                      label: 'Email',
-                      resolvetext: (value) => _email = value,
-                      isPassword: false,
+                    SizedBox(
+                      height: 12,
                     ),
-                    RegForms(
-                      label: 'Password',
-                      resolvetext: (value) => _password = value,
-                      isPassword: true,
+                    Container(
+                      color: aux1,
+                      padding: myPadding,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Other Details',
+                              style: GoogleFonts.asap(
+                                  color: aux2,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 17),
+                            ),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            RegDate(
+                              label: 'Date of birth',
+                              resolvetext: (value) => _dob = value,
+                            ),
+                            RegDropDown(
+                              label: 'Country/Region',
+                              choices: countries,
+                              resolvetext: (value) => _country = value,
+                              setNextText: (value) {
+                                selCountry = countries.firstWhere(
+                                    (element) => element.name == value);
+                                apiService
+                                    .getStates(selCountry.code)
+                                    .then((value) {
+                                  if (!value.error) {
+                                    setState(() {
+                                      states = value.data;
+                                    });
+                                  } else {
+                                    print(value.errMessage);
+                                  }
+                                });
+                              },
+                            ),
+                            RegDropDown(
+                              label: 'State',
+                              choices: states,
+                              resolvetext: (value) => _state = value,
+                              setNextText: (value) {
+                                selState = states.firstWhere(
+                                    (element) => element.region == value);
+                                apiService
+                                    .getCities(selCountry.code, selState.region)
+                                    .then((value) {
+                                  if (!value.error) {
+                                    setState(() {
+                                      cities = value.data;
+                                    });
+                                  }
+                                });
+                              },
+                            ),
+                            RegDropDown(
+                              label: 'City',
+                              choices: cities,
+                              resolvetext: (value) => _city = value,
+                              setNextText: (value) {},
+                            ),
+                            RegForms(
+                              label: 'Address',
+                              resolvetext: (value) => _address = value,
+                              isPassword: false,
+                            ),
+                            RegForms(
+                              label: 'Occupation',
+                              resolvetext: (value) => _occupation = value,
+                              isPassword: false,
+                            ),
+                            RegForms(
+                              label: 'Mobile number',
+                              resolvetext: (value) => _num = value,
+                              isPassword: false,
+                            ),
+                          ]),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 25, bottom: 10),
-                      child: Text(
-                        'Personal Information',
-                        style: GoogleFonts.asap(
-                            color: appstate.aux3,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 17),
-                      ),
-                    ),
-                    RegForms(
-                      label: 'Date of birth',
-                      resolvetext: (value) => _dob = value,
-                      isPassword: false,
-                    ),
-                    RegForms(
-                      label: 'Country/Region',
-                      resolvetext: (value) => _country = value,
-                      isPassword: false,
-                    ),
-                    RegForms(
-                      label: 'State',
-                      resolvetext: (value) => _state = value,
-                      isPassword: false,
-                    ),
-                    RegForms(
-                      label: 'City',
-                      resolvetext: (value) => _city = value,
-                      isPassword: false,
-                    ),
-                    RegForms(
-                      label: 'Address',
-                      resolvetext: (value) => _address = value,
-                      isPassword: false,
-                    ),
-                    RegForms(
-                      label: 'Occupation',
-                      resolvetext: (value) => _occupation = value,
-                      isPassword: false,
-                    ),
-                    RegForms(
-                      label: 'Mobile number',
-                      resolvetext: (value) => _num = value,
-                      isPassword: false,
+                    SizedBox(
+                      height: 12,
                     ),
                     Container(
                       width: double.infinity,
-                      height: 67,
-                      padding: EdgeInsets.all(15),
+                      height: 87,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                      color: aux1,
                       child: RaisedButton(
                         shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(30.0),
                         ),
-                        color: appstate.aux2,
+                        color: aux2,
                         elevation: 3.0,
                         child: Text(
                           'SUBMIT',
                           style: GoogleFonts.asap(
-                              color: appstate.aux1,
+                              color: aux1,
                               fontWeight: FontWeight.w400,
                               fontSize: 16),
                         ),

@@ -1,24 +1,24 @@
+import 'package:eat_now/services/auxilliary.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import 'models/MyServices.dart';
+import 'services/MyServices.dart';
 
 class OrderSuccess extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    var appstate = Provider.of<MyService>(context);
     return Scaffold(
       body: Container(
           height: double.infinity,
-          color: appstate.aux2,
+          color: aux2,
           alignment: Alignment.center,
           padding: EdgeInsets.symmetric(horizontal: 26),
           child: Container(
             height: 350,
             decoration: BoxDecoration(
-                color: appstate.aux8,
+                color: aux8,
                 borderRadius: BorderRadius.circular(8)
             ),
             padding: EdgeInsets.symmetric(horizontal: 30, vertical: 35),
@@ -26,11 +26,11 @@ class OrderSuccess extends StatelessWidget{
               children: <Widget>[
                 CircleAvatar(
                     radius: 40,
-                    backgroundColor: appstate.aux12,
+                    backgroundColor: aux12,
                     child: Center(
                       child: Icon(
                         Icons.check,
-                        color: appstate.aux2,
+                        color: aux2,
                       ),
                     )),
                 Padding(
@@ -38,7 +38,7 @@ class OrderSuccess extends StatelessWidget{
                   child: Text(
                     'Order Complete',
                     style: GoogleFonts.dancingScript(
-                        color: appstate.aux2,
+                        color: aux2,
                         fontWeight: FontWeight.w700,
                         fontSize: 38),
                   ),
@@ -47,7 +47,7 @@ class OrderSuccess extends StatelessWidget{
                   'Your order has been completed and delivery is on the way. You will be notified as soon as possible',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.sourceSansPro(
-                      color: appstate.aux2,
+                      color: aux2,
                       fontWeight: FontWeight.w500,
                       fontSize: 17),
                 ),
@@ -55,7 +55,7 @@ class OrderSuccess extends StatelessWidget{
                 IconButton(
                   icon: Icon(
                     Icons.close,
-                    color: appstate.aux6,
+                    color: aux6,
 
                   ),
                   iconSize: 20,

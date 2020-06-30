@@ -5,15 +5,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'cart_item.dart';
+import '../models/cart_item.dart';
 
-import 'UserModel.dart';
-import 'delivery_item.dart';
+import '../models/user_model.dart';
+import '../models/delivery_item.dart';
 
 class MyService with ChangeNotifier, DiagnosticableTreeMixin {
   //set Streams
-
+  FirebaseDatabase database;
+  MyService(){
+    database = FirebaseDatabase.instance;
+    database.setPersistenceEnabled(true);
+    database.setPersistenceCacheSizeBytes(10000000);
+  }
   //user functions
   FirebaseUser _user;
 
@@ -26,12 +32,12 @@ class MyService with ChangeNotifier, DiagnosticableTreeMixin {
   User get myUser => _myUser;
 
   void setMyUser(uid) {
-    FirebaseDatabase.instance
+    database
         .reference()
         .child("Users")
         .child(uid)
         .onValue
-        .map((event) => User.fromKey(event.snapshot.value))
+        .map((event) => User.fromJson(event.snapshot.value))
         .listen((event) {
       _myUser = event;
     });
@@ -84,23 +90,23 @@ class MyService with ChangeNotifier, DiagnosticableTreeMixin {
     return pr;
   }
 
-  //sample list
-  List foodlist = [
-    FoodItem('assets/ob2.jpeg',
-        'Ofe nsala with fresh oporoko, saddled with kpomo', '600',
-        id: '1'),
-    FoodItem('assets/ob3.jpeg',
-        'Coconot rice with red toppings with a pinch of bread crumbs', '1400',
-        id: '2'),
-    FoodItem('assets/ob4.jpeg',
-        'Indomie noodles hungryman size with carrot and fish', '450',
-        id: '3'),
-    FoodItem('assets/ob1.jpeg',
-        'Abacha and nkwobi with kpomo and lots of sauce', '900',
-        id: '4'),
-  ];
+//  //sample list
+//  List foodlist = [
+//    FoodItem('assets/ob2.jpeg',
+//        'Ofe nsala with fresh oporoko, saddled with kpomo', '600',
+//        id: '1'),
+//    FoodItem('assets/ob3.jpeg',
+//        'Coconot rice with red toppings with a pinch of bread crumbs', '1400',
+//        id: '2'),
+//    FoodItem('assets/ob4.jpeg',
+//        'Indomie noodles hungryman size with carrot and fish', '450',
+//        id: '3'),
+//    FoodItem('assets/ob1.jpeg',
+//        'Abacha and nkwobi with kpomo and lots of sauce', '900',
+//        id: '4'),
+//  ];
 
-  List getList() => foodlist;
+//  List getList() => foodlist;
 
   //cart items
   List<CartItem> cart = [];
@@ -195,6 +201,13 @@ class MyService with ChangeNotifier, DiagnosticableTreeMixin {
       newamount = newamount + sarray[a];
     }
     return newamount;
+  }
+
+  //date formatter
+  dateFormatter(String time){
+    DateTime timestamp = DateTime.parse(time);
+    var dateformat = new DateFormat.yMMMMd("en_US");
+    return dateformat.format(timestamp);
   }
 
   /// Makes `Counter` readable inside the devtools by listing all of its properties

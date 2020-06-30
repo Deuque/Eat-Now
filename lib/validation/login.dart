@@ -1,16 +1,21 @@
+import 'package:eat_now/models/ApiResponse.dart';
 import 'package:eat_now/models/basic_info.dart';
+import 'package:eat_now/services/auxilliary.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../AuthListener.dart';
-import '../Crud.dart';
-import '../models/MyServices.dart';
+import '../initial_pages/AuthListener.dart';
+import '../services/Crud.dart';
+import '../services/MyServices.dart';
 import 'login_forms.dart';
 
 class Login extends StatefulWidget {
+  final type;
+
+  const Login({Key key, this.type}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -35,23 +40,34 @@ class MyState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    var appstate = Provider.of<MyService>(context, listen: true);
 
-    var pr = appstate.getDialog(context);
+    var pr = getDialog(context);
 
     LoginUser() {
       if (checkFields()) {
         pr.show();
         CrudOperations.loginUser(
                 BasicInfo(email: _email.toString().trim(), password: _password))
-            .then((result) {
-          pr.hide();
+            .then((result) async {
+
           if (!result.data) {
+            pr.hide();
             Fluttertoast.showToast(
                 msg: result.errorMessage, toastLength: Toast.LENGTH_LONG);
           } else {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (_) => AuthListener()));
+            ApiResponse response = await CrudOperations.checkUserRole(_email);
+            if (response.error) {
+              Fluttertoast.showToast(
+                  msg: result.errorMessage, toastLength: Toast.LENGTH_LONG);
+              return;
+            }
+            pr.hide();
+            CrudOperations.setRole(response.data?'vendor':'user');
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                AuthListener()), (Route<dynamic> route) => false);
+//            Navigator.pushReplacement(
+//                context, MaterialPageRoute(builder: (_) => AuthListener()));
+
           }
         });
       }
@@ -59,20 +75,20 @@ class MyState extends State<Login> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: appstate.aux2,
+        backgroundColor: aux2,
         elevation: 0,
       ),
       body: ListView(
         children: <Widget>[
           Container(
-            color: appstate.aux2,
+            color: aux2,
             height: 90,
             width: double.infinity,
             child: Center(
               child: Text(
                 'Login',
                 style: GoogleFonts.dancingScript(
-                    color: appstate.aux1,
+                    color: aux1,
                     fontWeight: FontWeight.w700,
                     fontSize: 38),
               ),
@@ -107,7 +123,7 @@ class MyState extends State<Login> {
                         child: Text(
                           'Forgot password?',
                           style: GoogleFonts.asap(
-                              color: appstate.aux2,
+                              color: aux2,
                               fontWeight: FontWeight.w500,
                               fontSize: 15),
                         ),
@@ -120,12 +136,12 @@ class MyState extends State<Login> {
                           shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(30.0),
                           ),
-                          color: appstate.aux2,
+                          color: aux2,
                           elevation: 3.0,
                           child: Text(
                             'LOGIN',
                             style: GoogleFonts.asap(
-                                color: appstate.aux1,
+                                color: aux1,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 16),
                           ),

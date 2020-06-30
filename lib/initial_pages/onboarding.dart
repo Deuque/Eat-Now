@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:eat_now/models/MyServices.dart';
+import 'package:eat_now/initial_pages/validation_type.dart';
 import 'package:eat_now/models/caroussels.dart';
-import 'package:eat_now/validation_type.dart';
+import 'package:eat_now/services/auxilliary.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,7 +24,6 @@ class MyState extends State<Onboarding> {
 
   @override
   Widget build(BuildContext context) {
-    var appstate = Provider.of<MyService>(context, listen: true);
 
     return SafeArea(
         child: Scaffold(
@@ -88,7 +87,7 @@ class MyState extends State<Onboarding> {
                 child: Text(
                   'SKIP',
                   style: GoogleFonts.asap(
-                      color: appstate.aux2,
+                      color: aux2,
                       fontWeight: FontWeight.w400,
                       fontSize: 14),
                 ),
@@ -104,7 +103,7 @@ class MyState extends State<Onboarding> {
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(2)),
-                      color: _current == index ? appstate.aux2 : appstate.aux3,
+                      color: _current == index ? aux2 : aux3,
                     ),
                   );
                 }).toList(),
@@ -116,7 +115,7 @@ class MyState extends State<Onboarding> {
                 child: Text(
                   next_text,
                   style: GoogleFonts.asap(
-                      color: appstate.aux2,
+                      color: aux2,
                       fontWeight: FontWeight.w300,
                       fontSize: 14),
                 ),
@@ -145,7 +144,6 @@ class MyState2 extends State<NewWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var appstate = Provider.of<MyService>(context, listen: true);
     var index = widget.index;
 
     return Container(
@@ -158,7 +156,7 @@ class MyState2 extends State<NewWidget> {
             child: Text(
               items[index].title,
               style: GoogleFonts.dancingScript(
-                  color: appstate.aux2,
+                  color: aux2,
                   fontWeight: FontWeight.w700,
                   fontSize: 38),
             ),
@@ -167,7 +165,7 @@ class MyState2 extends State<NewWidget> {
             items[index].body,
             textAlign: TextAlign.center,
             style: GoogleFonts.asap(
-                color: appstate.aux2,
+                color: aux2,
                 fontWeight: FontWeight.w200,
                 fontSize: 16),
           ),

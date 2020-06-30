@@ -1,7 +1,10 @@
+import 'package:eat_now/services/RxServices.dart';
+import 'package:eat_now/services/auxilliary.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import '../confirm_order.dart';
-import '../models/MyServices.dart';
+import '../services/MyServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'cart_item_layout.dart';
@@ -11,13 +14,14 @@ class Cart extends StatefulWidget {
 }
 
 class MyState extends State<Cart> {
+//  RxServices get service => GetIt.I<RxServices>();
   int _totalPrice = 0;
   bool checkedValue = true;
   List cartitems = [];
 
   @override
   Widget build(BuildContext context) {
-    var appstate = Provider.of<MyService>(context, listen: true);
+    var appstate = Provider.of<MyService>(context,listen:true);
     cartitems = appstate.getCartList();
 
     _totalPrice = 0;
@@ -27,14 +31,14 @@ class MyState extends State<Cart> {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: appstate.aux1,
-          iconTheme: IconThemeData(color: appstate.aux2),
+          backgroundColor: aux1,
+          iconTheme: IconThemeData(color: aux2),
           elevation: 0,
           centerTitle: true,
           title: Text(
             'CART',
             style: GoogleFonts.roboto(
-                color: appstate.aux2,
+                color: aux2,
                 fontWeight: FontWeight.w900,
                 fontSize: 15),
           ),
@@ -52,7 +56,7 @@ class MyState extends State<Cart> {
                   flexibleSpace: FlexibleSpaceBar(
                     background: Container(
                       width: double.infinity,
-                      color: appstate.aux33,
+                      color: aux33,
                       padding: EdgeInsets.all(28),
                       alignment: Alignment.center,
                       child: Column(
@@ -61,7 +65,7 @@ class MyState extends State<Cart> {
                             'Total',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.asap(
-                                color: appstate.aux6,
+                                color: aux6,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 15),
                           ),
@@ -69,10 +73,10 @@ class MyState extends State<Cart> {
                             padding: const EdgeInsets.only(top: 6.0),
                             child:
 //                            Text(
-//                              'NGN${appstate.moneyResolver('$_totalPrice')}',
+//                              'NGN${moneyResolver('$_totalPrice')}',
 //                              textAlign: TextAlign.center,
 //                              style: GoogleFonts.asap(
-//                                  color: appstate.aux2,
+//                                  color: aux2,
 //                                  fontWeight: FontWeight.w700,
 //                                  fontSize: 29),
 //                            )
@@ -85,16 +89,16 @@ class MyState extends State<Cart> {
                                     'NGN',
                                     textAlign: TextAlign.center,
                                     style: GoogleFonts.asap(
-                                        color: appstate.aux2,
+                                        color: aux2,
                                         fontWeight: FontWeight.w700,
                                         fontSize: 18),
                                   ),
                                 )),
                                 TextSpan(
                                   text:
-                                      '${appstate.moneyResolver('$_totalPrice')}',
+                                      '${moneyResolver('$_totalPrice')}',
                                   style: GoogleFonts.asap(
-                                      color: appstate.aux2,
+                                      color: aux2,
                                       fontWeight: FontWeight.w700,
                                       fontSize: 29),
                                 )
@@ -114,7 +118,7 @@ class MyState extends State<Cart> {
             ),
             Divider(
               height: 1,
-              color: appstate.aux4,
+              color: aux4,
             ),
 //            Padding(
 //              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 25),
@@ -122,14 +126,14 @@ class MyState extends State<Cart> {
 //                'If you want to come to the office for delivery, kindly uncheck the option below',
 //                textAlign: TextAlign.center,
 //                style: GoogleFonts.asap(
-//                    color: appstate.aux2,
+//                    color: aux2,
 //                    fontWeight: FontWeight.w400,
 //                    fontSize: 14),
 //              ),
 //            ),
 //            Divider(
 //              height: 1,
-//              color: appstate.aux4,
+//              color: aux4,
 //            ),
 //            Padding(
 //              padding: EdgeInsets.only(top: 10, bottom: 13.0, right: 20.0),
@@ -142,7 +146,7 @@ class MyState extends State<Cart> {
 //                      'Delivery',
 //                      textAlign: TextAlign.start,
 //                      style: GoogleFonts.asap(
-//                          color: appstate.aux6,
+//                          color: aux6,
 //                          fontWeight: FontWeight.w500,
 //                          fontSize: 16),
 //                    ),
@@ -160,7 +164,7 @@ class MyState extends State<Cart> {
 //                    'NGN300',
 //                    textAlign: TextAlign.center,
 //                    style: GoogleFonts.asap(
-//                        color: appstate.aux2,
+//                        color: aux2,
 //                        fontWeight: FontWeight.w400,
 //                        fontSize: 16),
 //                  )
@@ -171,7 +175,7 @@ class MyState extends State<Cart> {
               width: double.infinity,
               height: 50,
               child: FlatButton(
-                color: appstate.aux2,
+                color: aux2,
                 onPressed: () {
                   if(!cartitems.isEmpty){
                     Navigator.push(context, MaterialPageRoute(builder: (_)=>ConfirmOrder()));
@@ -181,7 +185,7 @@ class MyState extends State<Cart> {
                   'ORDER',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.asap(
-                      color: appstate.aux1,
+                      color: aux1,
                       fontWeight: FontWeight.w300,
                       fontSize: 15),
                 ),

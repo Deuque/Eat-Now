@@ -7,6 +7,7 @@ class BasicInfo {
     return BasicInfo(
       email: data['email'],
       fname: data['fname'],
+      password: data['password']
     );
   }
 
@@ -14,6 +15,7 @@ class BasicInfo {
     return {
       'email': this.email,
       'fname': this.fname,
+      'password': this.password
     };
   }
 }

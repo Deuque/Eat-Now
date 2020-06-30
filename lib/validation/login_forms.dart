@@ -1,4 +1,5 @@
-import 'package:eat_now/models/MyServices.dart';
+import 'file:///C:/Users/user/Desktop/Flutter%20Projects/eat_now/lib/services/MyServices.dart';
+import 'package:eat_now/services/auxilliary.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,9 +14,8 @@ class LoginForms extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appstate = Provider.of<MyService>(context, listen: true);
     return Container(
-      color: appstate.aux1,
+      color: aux1,
       width: double.maxFinite,
       child: TextFormField(
         style: GoogleFonts.sourceSansPro(

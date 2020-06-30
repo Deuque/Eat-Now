@@ -1,12 +1,14 @@
 import 'package:eat_now/navigations/profile.dart';
+import 'package:eat_now/services/Crud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../models/MyServices.dart';
+import '../services/MyServices.dart';
 import 'cart.dart';
+import 'my_orders.dart';
 
 class NavItems extends StatelessWidget {
   @override
@@ -65,7 +67,7 @@ class NavItems extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(top: 5.0, bottom: 15),
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () =>Navigator.pop(context),
                     child: Text(
                       'Explore',
                       textAlign: TextAlign.center,
@@ -79,9 +81,11 @@ class NavItems extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.all(15.0),
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      _navigateToWidget(MyOrders());
+                    },
                     child: Text(
-                      'Track meal',
+                      'My Orders',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.asap(
                           color: appstate.aux1,
@@ -132,6 +136,7 @@ class NavItems extends StatelessWidget {
             child: FlatButton(
               color: appstate.aux3,
               onPressed: () {
+                CrudOperations.setRole('');
                 FirebaseAuth.instance.signOut();
               },
               child: Text(
