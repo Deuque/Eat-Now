@@ -1,5 +1,4 @@
 import 'package:eat_now/navigations/dash.dart';
-import 'package:eat_now/navigations/food_layout.dart';
 import 'package:eat_now/navigations/my_orders.dart';
 import 'package:eat_now/navigations/nav_items.dart';
 import 'package:eat_now/navigations/profile.dart';
@@ -10,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'bottomAppBar.dart';
 import '../services/MyServices.dart';
+import 'cart.dart';
 
 class PageHolder extends StatefulWidget {
   @override
@@ -119,9 +119,9 @@ class MyState extends State<PageHolder> {
 //            ],
 //          ),
 //        ),
-        drawer: Drawer(
-          child: drawerItems,
-        ),
+//        drawer: Drawer(
+//          child: drawerItems,
+//        ),
 //        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 //        floatingActionButton: SizedBox(
 //          height: 50,
@@ -145,6 +145,8 @@ class MyState extends State<PageHolder> {
                 current=Dashboard();
               }else if(value==1){
                 current=MyOrders();
+              }else if(value==2){
+                current = Cart();
               }else if(value==3){
                 current = Profile();
               }
@@ -154,7 +156,7 @@ class MyState extends State<PageHolder> {
             FABBottomAppBarItem(iconData: 'assets/home.png', text: 'Explore'),
             FABBottomAppBarItem(iconData: 'assets/orders.png', text: 'Orders'),
 //            FABBottomAppBarItem(iconData: '', text: ''),
-            FABBottomAppBarItem(iconData: 'assets/wallet.png', text: 'Wallet'),
+            FABBottomAppBarItem(iconData: 'assets/cart.png', text: 'Cart'),
             FABBottomAppBarItem(iconData: 'assets/user.png', text: 'Profile'),
 
           ],

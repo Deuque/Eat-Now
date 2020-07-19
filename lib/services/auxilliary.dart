@@ -56,7 +56,11 @@ void showToast(BuildContext context, text, {snackaction}) {
   final scaffold = Scaffold.of(context);
   scaffold.showSnackBar(
     SnackBar(
-      backgroundColor: aux6,
+      backgroundColor: Colors.black87,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8)
+      ),
       content: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[

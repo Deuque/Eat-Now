@@ -1,24 +1,53 @@
+import 'package:eat_now/models/admin_model.dart';
 import 'package:eat_now/models/cart_item.dart';
 import 'package:eat_now/models/delivery_item.dart';
 import 'package:eat_now/models/food_item.dart';
 import 'package:eat_now/models/user_model.dart';
 import 'package:eat_now/models/vendor_model.dart';
+import 'package:eat_now/services/state_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'ApiService.dart';
 import 'auxilliary.dart';
+import 'city_model.dart';
+import 'country_model.dart';
 
 class RxServices {
   FirebaseDatabase database;
+
+  List<CountryModel> countries = [];
+  List<CountryModel> get mcountries => countries;
+  setCountry(c){
+    countries = c;
+  }
+  List<StateModel> states = [];
+  List<StateModel> get mstates => states;
+  setStates(s){
+    states = s;
+  }
+  List<CityModel> cities = [];
+  List<CityModel> get mcities => cities;
+  setCities(ct){
+    cities = ct;
+  }
 
   RxServices() {
     database = FirebaseDatabase.instance;
     database.setPersistenceEnabled(true);
     database.setPersistenceCacheSizeBytes(10000000);
+
+  }
+
+  bool _shownFilter = false;
+  bool get shownFilter => _shownFilter;
+  setShownFilter(){
+    _shownFilter = true;
   }
 
   //user functions
@@ -36,6 +65,29 @@ class RxServices {
     _role = role;
   }
 
+  BehaviorSubject<Admin> adminObservable = BehaviorSubject.seeded(null);
+
+  Stream<Admin> get adminStream => adminObservable.stream;
+  Admin _myAdmin;
+
+  Admin get myAdmin => _myAdmin;
+
+  void setMyAdmin(uid) {
+    Stream s = database
+        .reference()
+        .child("Admins")
+        .child(uid)
+        .onValue
+        .map((event) =>Admin.fromJson(event.snapshot.value));
+    s.listen((event) {
+      _myAdmin = event;
+    });
+    s.listen((event) {
+      adminObservable.sink.add(event);
+    });
+  }
+
+
   BehaviorSubject<User> userObservable = BehaviorSubject.seeded(null);
 
   Stream<User> get userStream => userObservable.stream;
@@ -49,7 +101,7 @@ class RxServices {
         .child("Users")
         .child(uid)
         .onValue
-        .map((event) => User.fromJson(event.snapshot));
+        .map((event) =>User.fromJson(event.snapshot.value));
     s.listen((event) {
       _myUser = event;
     });
@@ -104,6 +156,32 @@ class RxServices {
     });
   }
 
+  BehaviorSubject<List<User>> usersObservable = BehaviorSubject.seeded([]);
+
+  Stream<List<User>> get usersStream => usersObservable.stream;
+
+  void getUsers() {
+    database.reference().child("Users").onValue.map((event) {
+      DataSnapshot snapshot = event.snapshot;
+      Map<dynamic, dynamic> DATA = snapshot.value;
+
+      if (DATA != null) {
+        List<User> users = [];
+        DATA.forEach((key, value) {
+          User u = User.fromJson(DATA[key]);
+          u.id = key;
+          users.insert(0, u);
+        });
+        return users;
+      }
+
+      return [];
+    }).listen((event) {
+      usersObservable.sink.add(event);
+    });
+  }
+
+
   BehaviorSubject<List<Vendor>> vendorObservable = BehaviorSubject.seeded([]);
 
   Stream<List<Vendor>> get vendorStream => vendorObservable.stream;
@@ -126,6 +204,57 @@ class RxServices {
       return [];
     }).listen((event) {
       vendorObservable.sink.add(event);
+    });
+  }
+
+  BehaviorSubject<List<DeliveryItem>> deliveryObservable = BehaviorSubject.seeded([]);
+
+  Stream<List<DeliveryItem>> get deliveryStream => deliveryObservable.stream;
+
+  void getDeliveries() {
+    database.reference().child("Deliveries").onValue.map((event) {
+      DataSnapshot snapshot = event.snapshot;
+      Map<dynamic, dynamic> DATA = snapshot.value;
+
+      if (DATA != null) {
+        List<DeliveryItem> deliveries = [];
+        DATA.forEach((key, value) {
+          DeliveryItem d = DeliveryItem.fromJson(DATA[key]);
+          if(d.consumer == _user.uid || d.vendor == _user.uid){
+            d.id = key;
+            deliveries.insert(0, d);
+          }
+        });
+        return deliveries;
+      }
+
+      return [];
+    }).listen((event) {
+      deliveryObservable.sink.add(event);
+    });
+  }
+
+  BehaviorSubject<List<String>> categoryObservable = BehaviorSubject.seeded([]);
+
+  Stream<List<String>> get categoryStream => categoryObservable.stream;
+
+  void getCategories() {
+    database.reference().child("Categories").onValue.map((event) {
+      DataSnapshot snapshot = event.snapshot;
+      Map<dynamic, dynamic> DATA = snapshot.value;
+
+      if (DATA != null) {
+        List<String> categories = [];
+        DATA.forEach((key, value) {
+          categories.add(DATA[key].toString());
+        });
+        categories.insert(0, '--Select Restaurant Category--');
+        return categories;
+      }
+
+      return ['--Select Restaurant Category--'];
+    }).listen((event) {
+      categoryObservable.sink.add(event);
     });
   }
 
@@ -191,6 +320,7 @@ class RxServices {
 
   void deleteCart(CartItem item) {
     getCartList().remove(item);
+    cartObservable.sink.add(cart);
   }
 
   bool isThere(CartItem newItem) {
@@ -216,33 +346,5 @@ class RxServices {
     deliveries.add(item);
   }
 
-  //toast builder
-  void showToast(BuildContext context, text, {snackaction}) {
-    final scaffold = Scaffold.of(context);
-    scaffold.showSnackBar(
-      SnackBar(
-        backgroundColor: aux6,
-        content: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Icon(
-              Icons.check_circle,
-              color: aux1,
-            ),
-            SizedBox(
-              width: 6,
-            ),
-            Text(
-              text,
-              textAlign: TextAlign.start,
-              style: GoogleFonts.asap(
-                  color: aux1, fontWeight: FontWeight.w500, fontSize: 15),
-            ),
-          ],
-        ),
-        action: SnackBarAction(
-            textColor: aux2, label: 'VIEW CART', onPressed: snackaction),
-      ),
-    );
-  }
+
 }

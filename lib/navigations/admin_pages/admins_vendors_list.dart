@@ -1,6 +1,8 @@
 import 'package:eat_now/models/basic_info.dart';
 import 'package:eat_now/models/delivery_item.dart';
 import 'package:eat_now/models/personal_info.dart';
+import 'package:eat_now/models/vendor_model.dart';
+import 'package:eat_now/navigations/admin_pages/admin_vendor_layout.dart';
 import 'package:eat_now/navigations/dash.dart';
 import 'package:eat_now/services/RxServices.dart';
 import 'package:eat_now/services/auxilliary.dart';
@@ -11,14 +13,11 @@ import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../services/MyServices.dart';
-import 'delivery_layout.dart';
-
-class MyOrders extends StatefulWidget {
-  State<MyOrders> createState() => MyState();
+class AdminVendorsList extends StatefulWidget {
+  State<AdminVendorsList> createState() => MyState();
 }
 
-class MyState extends State<MyOrders> {
+class MyState extends State<AdminVendorsList> {
   RxServices get service => GetIt.I<RxServices>();
   BasicInfo basicInfo;
   PersonalInfo personalInfo;
@@ -32,13 +31,10 @@ class MyState extends State<MyOrders> {
 
   @override
   Widget build(BuildContext context) {
-//    Fluttertoast.showToast(msg: '${deliveries.length}');
-    basicInfo = service.myUser.basicInfo;
-    personalInfo = service.myUser.personalInfo;
 
     return Scaffold(
       body: DefaultTabController(
-        length: 3,
+        length: 2,
         child: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
@@ -52,11 +48,11 @@ class MyState extends State<MyOrders> {
                 flexibleSpace: FlexibleSpaceBar(
                   centerTitle: true,
                   title: Text(
-                    'My Orders',
+                    'Vendors',
                     style: GoogleFonts.roboto(
-                        color: aux2,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 15),
+                        color: aux6,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18),
                   ),
                 ),
               ),
@@ -65,12 +61,11 @@ class MyState extends State<MyOrders> {
                   TabBar(
 
                     labelColor: aux2,
-                    unselectedLabelColor: aux4,
+                    unselectedLabelColor: aux42,
                     indicatorSize: TabBarIndicatorSize.label,
                     tabs: [
-                      Tab(text: "Pending"),
-                      Tab(text: "Delivered"),
-                      Tab(text: "Cancelled"),
+                      Tab(text: "Unverified"),
+                      Tab(text: "Verified"),
                     ],
 
                   ),
@@ -82,7 +77,6 @@ class MyState extends State<MyOrders> {
           body: TabBarView(children: [
             new tabViews(index: 0,),
             new tabViews(index: 1,),
-            new tabViews(index: 2,),
           ]),
         ),
       ),
@@ -131,8 +125,8 @@ class tabViews extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new StreamBuilder<List<DeliveryItem>>(
-        stream: service.deliveryStream,
+    return new StreamBuilder<List<Vendor>>(
+        stream: service.vendorStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -140,33 +134,26 @@ class tabViews extends StatelessWidget {
             );
           }
           if (snapshot.hasData && snapshot.data.isNotEmpty) {
-            List<DeliveryItem> deliveries = snapshot.data;
-            List selectedItems = [];
+            List vendors = [];
             if (index == 0) {
-              deliveries.forEach((element) {
-                if(element.status=='PROCESSING'){
-                 selectedItems.add(element);
+              snapshot.data.forEach((element) {
+                if(!element.isVerified){
+                  vendors.add(element);
                 }
               });
             }
             else  if (index == 1) {
-              deliveries.forEach((element) {
-                if(element.status=='DELIVERED'){
-                  selectedItems.add(element);
+              snapshot.data.forEach((element) {
+                if(element.isVerified){
+                  vendors.add(element);
                 }
               });
-          } else if (index == 2) {
-              deliveries.forEach((element) {
-                if(element.status=='CANCELLED'){
-                  selectedItems.add(element);
-                }
-              });
-            }
+          }
 
-            if(selectedItems.isNotEmpty) {
+            if(vendors.isNotEmpty) {
               return new ListView(
                 children: <Widget>[
-                  for (final item in selectedItems) DeliveryLayout(item)
+                  for (final item in vendors) AdminVendorLayout(vendor: item,)
                 ],
               );
             }

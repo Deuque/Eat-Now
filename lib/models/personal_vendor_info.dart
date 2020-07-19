@@ -1,5 +1,5 @@
 class PersonalVendorInfo {
-  String cname, cemail, cpassword, cnum, country, state, city, address, logoUrl,logokey;
+  String cname, cemail, cpassword, cnum, country, state, city, address, logoUrl,imgkey,bannerUrl,category;
 
   PersonalVendorInfo(
       {this.cname,
@@ -11,7 +11,9 @@ class PersonalVendorInfo {
         this.city,
         this.address,
       this.logoUrl,
-      this.logokey});
+      this.imgkey,
+        this.bannerUrl,
+      this.category});
 
   factory PersonalVendorInfo.fromKey(data) {
     if(data==null||data.toString().isEmpty){
@@ -27,7 +29,9 @@ class PersonalVendorInfo {
       cemail: data['cemail'],
       cpassword: data['cpassword'],
         logoUrl: data['logoUrl'],
-      logokey: data['logokey']??''
+      imgkey: data['imgkey']??'',
+      bannerUrl: data['bannerUrl']??'',
+      category: data['category']??''
     );
   }
 
@@ -42,7 +46,9 @@ class PersonalVendorInfo {
       'cemail': this.cemail,
       'cpassword': this.cpassword,
       'logoUrl': this.logoUrl,
-      'logokey': this.logokey
+      'imgkey': this.imgkey,
+      'bannerUrl': this.bannerUrl,
+      'category':this.category
     };
   }
 }

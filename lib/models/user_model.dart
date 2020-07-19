@@ -1,12 +1,14 @@
 import 'package:eat_now/models/basic_info.dart';
+import 'package:eat_now/models/payment_info.dart';
 import 'package:eat_now/models/personal_info.dart';
 
 class User {
   String id;
   BasicInfo basicInfo;
   PersonalInfo personalInfo;
+  PaymentInfo paymentInfo;
 
-  User({this.id,this.basicInfo, this.personalInfo});
+  User({this.id,this.basicInfo, this.personalInfo, this.paymentInfo});
 
   Map<String, dynamic> toMap() {
     return {
@@ -15,11 +17,10 @@ class User {
     };
   }
 
-  factory User.fromJson(jsondata) {
-    var data = jsondata.value;
+  factory User.fromJson(data) {
     return User(
-      id: jsondata.key,
         basicInfo: BasicInfo.fromKey(data['basicInfo']),
-        personalInfo: PersonalInfo.fromKey(data['personalInfo']));
+        personalInfo: PersonalInfo.fromKey(data['personalInfo']),
+    paymentInfo: data['paymentInfo']==null?null:PaymentInfo.fromKey(data['paymentInfo']));
   }
 }

@@ -13,9 +13,7 @@ import '../services/MyServices.dart';
 import 'login_forms.dart';
 
 class Login extends StatefulWidget {
-  final type;
-
-  const Login({Key key, this.type}) : super(key: key);
+  const Login({Key key}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -55,18 +53,17 @@ class MyState extends State<Login> {
             Fluttertoast.showToast(
                 msg: result.errorMessage, toastLength: Toast.LENGTH_LONG);
           } else {
-            ApiResponse response = await CrudOperations.checkUserRole(_email);
+            ApiResponse response = await CrudOperations.getUserRole(_email.toString().trim());
             if (response.error) {
               Fluttertoast.showToast(
                   msg: result.errorMessage, toastLength: Toast.LENGTH_LONG);
               return;
             }
             pr.hide();
-            CrudOperations.setRole(response.data?'vendor':'user');
+
+            CrudOperations.setRole(response.data);
             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                 AuthListener()), (Route<dynamic> route) => false);
-//            Navigator.pushReplacement(
-//                context, MaterialPageRoute(builder: (_) => AuthListener()));
 
           }
         });
@@ -130,11 +127,11 @@ class MyState extends State<Login> {
                       ),
                       Container(
                         width: double.infinity,
-                        height: 60,
+                        height: 58,
                         padding: EdgeInsets.all(10),
                         child: RaisedButton(
                           shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(30.0),
+                            borderRadius: new BorderRadius.circular(9),
                           ),
                           color: aux2,
                           elevation: 3.0,

@@ -1,5 +1,6 @@
 
 import 'package:eat_now/initial_pages/verify_email.dart';
+import 'package:eat_now/navigations/admin_pages/admin_dash.dart';
 import 'package:eat_now/navigations/vendor_pages/vendor_dash.dart';
 import 'package:eat_now/services/Crud.dart';
 import 'package:eat_now/services/RxServices.dart';
@@ -29,14 +30,16 @@ class AuthListener extends StatelessWidget {
     return StreamBuilder<FirebaseUser>(
         stream: FirebaseAuth.instance.onAuthStateChanged,
         builder: (BuildContext context, snapshot) {
+          service.getCategories();
           if (snapshot.connectionState == ConnectionState.waiting) {
             return state;
           } else {
+
             if (snapshot.hasData) {
               FirebaseUser user = snapshot.data;
               service.setFirebaseUser(user);
               service.getFoodItems();
-
+              service.getDeliveries();
 
 
                 return FutureBuilder(
@@ -48,21 +51,26 @@ class AuthListener extends StatelessWidget {
                       if (snapshot.data == 'user') {
                         service.setMyUser(user.uid);
                         service.getVendors();
-                      }else{
+                      }else if (snapshot.data == 'vendor') {
                         service.setMyVendor(user.uid);
+                      }else{
+                        service.setMyAdmin(user.uid);
+                        service.getVendors();
+                        service.getUsers();
                       }
 
 
-                      if (!user.isEmailVerified) {
+                      if (snapshot.data!='admin'&&!user.isEmailVerified) {
                         return VerifyEmail();
                       }
 
 
                       if (snapshot.data == 'user') {
                         return PageHolder();
+                      }else if (snapshot.data == 'vendor'){
+                        return VendorDash();
                       }
-
-                      return VendorDash();
+                      return AdminDash();
                     } else {
                       return state;
                     }

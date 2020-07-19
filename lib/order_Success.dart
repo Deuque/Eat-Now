@@ -59,7 +59,7 @@ class OrderSuccess extends StatelessWidget{
 
                   ),
                   iconSize: 20,
-                  onPressed: ()=> Navigator.pop(context),
+                  onPressed: ()=> Navigator.pop(context,true),
                 )
               ],
             ),

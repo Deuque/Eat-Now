@@ -8,15 +8,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 BoxDecoration adecor = BoxDecoration(
-    borderRadius: BorderRadius.all(Radius.circular(6.0)),
+    borderRadius: BorderRadius.all(Radius.circular(5.0)),
     color: aux1,
 //  border: Border.all(width: 0),
-  boxShadow: [
-    BoxShadow(
-        color: aux8.withOpacity(.5),
-        offset: Offset(0.0, 1.9),
-        blurRadius: 8.0)
-  ],
+//  boxShadow: [
+//    BoxShadow(
+//        color: aux8.withOpacity(.5),
+//        offset: Offset(0.0, 1.1),
+//        blurRadius: 8.0)
+//  ],
 );
 class AddItemForms extends StatelessWidget {
   final resolvetext,controller,isdesc,isNum;
@@ -38,7 +38,7 @@ class AddItemForms extends StatelessWidget {
                 RegExp("[0-9]")),
           ],
           keyboardType: !isNum?TextInputType.text:TextInputType.number,
-          controller: controller,
+          controller: controller??TextEditingController(),
           maxLines: 3,
           minLines: isdesc?3:1,
           decoration: InputDecoration(

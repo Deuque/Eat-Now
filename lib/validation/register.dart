@@ -259,13 +259,13 @@ class MyState extends State<Register> {
                     ),
                     Container(
                       width: double.infinity,
-                      height: 87,
+                      height: 81,
                       padding:
                           EdgeInsets.symmetric(horizontal: 25, vertical: 20),
                       color: aux1,
                       child: RaisedButton(
                         shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0),
+                          borderRadius: new BorderRadius.circular(9),
                         ),
                         color: aux2,
                         elevation: 3.0,

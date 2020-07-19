@@ -77,7 +77,7 @@ class _ValTypeState extends State<ValType> {
                   ),
                   onPressed: () {
                     Widget widget =
-                        valtype == 'Login' ? Login(type: 'user') : Register();
+                        valtype == 'Login' ? Login() : Register();
                     Navigator.push(context, FadeRoute(page: widget));
                   },
                 ),
@@ -103,7 +103,7 @@ class _ValTypeState extends State<ValType> {
                   ),
                   onPressed: () {
                     Widget widget = valtype == 'Login'
-                        ? Login(type: 'vendor')
+                        ? Login()
                         : RegisterVendor();
                     Navigator.push(context, FadeRoute(page: widget));
                   },
@@ -164,10 +164,7 @@ class _ValTypeState extends State<ValType> {
                       color: aux2, fontWeight: FontWeight.w300, fontSize: 16),
                 ),
                 onPressed: () {
-                  _bottomSheet();
-                  setState(() {
-                    valtype = 'Login';
-                  });
+                  Navigator.push(context, FadeRoute(page: Login()));
                 },
               ),
               Container(

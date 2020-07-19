@@ -39,13 +39,6 @@ class _CatalogueState extends State<Catalogue> {
       return false;
     }
 
-    getImage() async {
-      File file = await FilePicker.getFile(type: FileType.image);
-
-      setState(() {
-        image = file;
-      });
-    }
 
     setSelItem(FoodItem item) {
       setState(() {
@@ -67,11 +60,17 @@ class _CatalogueState extends State<Catalogue> {
         return;
       }
 
+      FoodItem item = new FoodItem(
+          vendor: service.firebaseUser.uid,
+          name: name,
+          desc: desc,
+          price: price,);
       var key = DateTime.now().millisecondsSinceEpoch;
       pr.show();
       if (image != null) {
+        var id = selItem==null?key:selItem.id;
         ApiResponse image_response = await CrudOperations.uploadImage(
-            file: image, path: 'FoodImages', key: '$key');
+            file: image, path: 'FoodImages', key: '$id');
         if (image_response.error) {
           pr.hide();
           Fluttertoast.showToast(
@@ -80,58 +79,30 @@ class _CatalogueState extends State<Catalogue> {
           return;
         }
 
-        FoodItem item = new FoodItem(
-            vendor: service.firebaseUser.uid,
-            name: name,
-            desc: desc,
-            price: price,
-            imgUrl: image_response.data,
-            id: '$key');
-        ApiResponse data_response = await CrudOperations.uploadFoodItem(item);
-        pr.hide();
-        if (data_response.error) {
-          Fluttertoast.showToast(
-              msg: 'Data Upload Error: ' + data_response.errorMessage,
-              toastLength: Toast.LENGTH_LONG);
-          return;
-        }
-
-        Fluttertoast.showToast(msg: 'Item added successfully');
-        Navigator.pop(context);
-        setState(() {
-          image = null;
-          selItem = null;
-          name = '';
-          price = '';
-          desc = '';
-        });
+       item.imgUrl = image_response.data;
+        item.id = '$id';
       } else {
-        FoodItem item = new FoodItem(
-            vendor: service.firebaseUser.uid,
-            name: name,
-            desc: desc,
-            price: price,
-            imgUrl: selItem.imgUrl,
-            id: selItem.id);
-        ApiResponse data_response = await CrudOperations.uploadFoodItem(item);
-        pr.hide();
-        if (data_response.error) {
-          Fluttertoast.showToast(
-              msg: 'Data Upload Error: ' + data_response.errorMessage,
-              toastLength: Toast.LENGTH_LONG);
-          return;
-        }
-
-        Fluttertoast.showToast(msg: 'Item added successfully');
-        Navigator.pop(context);
-        setState(() {
-          image = null;
-          selItem = null;
-          name = '';
-          price = '';
-          desc = '';
-        });
+        item.imgUrl = selItem.imgUrl;
+        item.id = selItem.id;
       }
+      ApiResponse data_response = await CrudOperations.uploadFoodItem(item);
+      pr.hide();
+      if (data_response.error) {
+        Fluttertoast.showToast(
+            msg: 'Data Upload Error: ' + data_response.errorMessage,
+            toastLength: Toast.LENGTH_LONG);
+        return;
+      }
+
+      Fluttertoast.showToast(msg: 'Item added successfully');
+      Navigator.pop(context);
+      setState(() {
+        image = null;
+        selItem = null;
+        name = '';
+        price = '';
+        desc = '';
+      });
     }
 
     void _bottomSheet() {
@@ -144,6 +115,14 @@ class _CatalogueState extends State<Catalogue> {
         ),
         context: context,
         builder: (context) => StatefulBuilder(builder: (context, setState) {
+          getImage() async {
+            File file = await FilePicker.getFile(type: FileType.image);
+
+            setState(() {
+              image = file;
+            });
+          }
+
           return SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.only(left:20,right:20,top: 15, bottom:MediaQuery.of(context).viewInsets.bottom),
@@ -168,7 +147,7 @@ class _CatalogueState extends State<Catalogue> {
                     Text(
                       'Food Name',
                       style: GoogleFonts.roboto(
-                          color: aux2, fontWeight: FontWeight.w600, fontSize: 15),
+                          color: aux2, fontWeight: FontWeight.w600, fontSize: 14),
                     ),
                     AddItemForms(
                       controller: ncontrol,
@@ -182,7 +161,7 @@ class _CatalogueState extends State<Catalogue> {
                     Text(
                       'Food Description',
                       style: GoogleFonts.roboto(
-                          color: aux2, fontWeight: FontWeight.w600, fontSize: 15),
+                          color: aux2, fontWeight: FontWeight.w600, fontSize: 14),
                     ),
                     AddItemForms(
                       controller: dcontrol,
@@ -197,7 +176,7 @@ class _CatalogueState extends State<Catalogue> {
                     Text(
                       'Price',
                       style: GoogleFonts.roboto(
-                          color: aux2, fontWeight: FontWeight.w600, fontSize: 15),
+                          color: aux2, fontWeight: FontWeight.w600, fontSize: 14),
                     ),
                     AddItemForms(
                       isNum: true,
@@ -209,23 +188,25 @@ class _CatalogueState extends State<Catalogue> {
                     SizedBox(
                       height: 16,
                     ),
-                    FlatButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      color: aux2,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 15.0, horizontal: 24),
+                    Container(
+                      width: double.infinity,
+                      height: 50,
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                      child: FlatButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        color: aux2,
+                        onPressed: resolveFoodItem,
                         child: Text(
                           selItem == null ? 'Add Post' : 'Edit Post',
-                          style: GoogleFonts.roboto(
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.asap(
                               color: aux1,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w400,
                               fontSize: 15),
                         ),
                       ),
-                      onPressed: resolveFoodItem,
                     ),
                     SizedBox(
                       height: 13,

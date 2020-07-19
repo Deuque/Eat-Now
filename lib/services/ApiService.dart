@@ -11,7 +11,7 @@ import 'dart:convert';
 class ApiService {
 
   static const MY_URL = 'http://battuta.medunes.net/api/';
-  static const KEY ='71fee5471f005359b88aa61b00cd4d6b';
+  static const KEY ='435c3933050485d621d3b3b5b8939095';
 
   Future<ApiResponse<List<CountryModel>>> getCountries() {
     return http.get(MY_URL+'country/all/?key='+KEY).then((data) {
@@ -26,10 +26,10 @@ class ApiService {
             data: countries, error: false, errMessage: '');
       }
       return ApiResponse<List<CountryModel>>(
-          data: null, error: true, errMessage: 'An error occurred');
+          data: null, error: true, errMessage: data.statusCode.toString());
     }).catchError((error) {
       return ApiResponse<List<CountryModel>>(
-          data: null, error: true, errMessage: 'An error occurred');
+          data: null, error: true, errMessage: error.toString());
     });
   }
 

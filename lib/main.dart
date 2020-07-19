@@ -1,6 +1,7 @@
 import 'file:///C:/Users/user/Desktop/Flutter%20Projects/eat_now/lib/initial_pages/onboarding.dart';
 import 'file:///C:/Users/user/Desktop/Flutter%20Projects/eat_now/lib/initial_pages/verify_email.dart';
 import 'package:eat_now/services/RxServices.dart';
+import 'package:eat_now/services/auxilliary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -20,7 +21,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    var appstate = Provider.of<MyService>(context, listen: true);
     return MaterialApp(
       title: 'Eat Now',
       theme: ThemeData(
@@ -65,13 +65,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var appstate = Provider.of<MyService>(context, listen: true);
 
     return Scaffold(
-        backgroundColor: appstate.aux2,
+        backgroundColor: aux2,
         body: isSplash
             ? Container(
-                color: appstate.aux2,
+                color: aux2,
                 child: Center(
                   child: Image.asset('assets/logo1.jpeg'),
                 ),

@@ -2,39 +2,31 @@ import 'package:eat_now/models/basic_info.dart';
 import 'package:eat_now/models/delivery_item.dart';
 import 'package:eat_now/models/personal_info.dart';
 import 'package:eat_now/navigations/dash.dart';
+import 'package:eat_now/navigations/vendor_pages/delivery_vendor_layout.dart';
+import 'package:eat_now/services/MyServices.dart';
 import 'package:eat_now/services/RxServices.dart';
 import 'package:eat_now/services/auxilliary.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../services/MyServices.dart';
-import 'delivery_layout.dart';
-
-class MyOrders extends StatefulWidget {
-  State<MyOrders> createState() => MyState();
+class Orders extends StatefulWidget {
+  State<Orders> createState() => MyState();
 }
 
-class MyState extends State<MyOrders> {
+class MyState extends State<Orders> {
   RxServices get service => GetIt.I<RxServices>();
-  BasicInfo basicInfo;
-  PersonalInfo personalInfo;
-  List<DeliveryItem> deliveries;
-
-  @override
-  void initState() {
-
-    super.initState();
-  }
+//  BasicInfo basicInfo;
+//  PersonalInfo personalInfo;
 
   @override
   Widget build(BuildContext context) {
-//    Fluttertoast.showToast(msg: '${deliveries.length}');
-    basicInfo = service.myUser.basicInfo;
-    personalInfo = service.myUser.personalInfo;
+    var appstate = Provider.of<MyService>(context, listen: true);
+//    Fluttertoast.showToast(msg: '${appstate.deliveries.length}');
+//    basicInfo = service.myUser.basicInfo;
+//    personalInfo = service.myUser.personalInfo;
 
     return Scaffold(
       body: DefaultTabController(
@@ -46,33 +38,31 @@ class MyState extends State<MyOrders> {
                 expandedHeight: 100.0,
                 floating: false,
                 pinned: true,
-                backgroundColor: aux1,
-                iconTheme: IconThemeData(color: aux2),
+                backgroundColor: appstate.aux1,
+                iconTheme: IconThemeData(color: appstate.aux2),
                 elevation: 1,
                 flexibleSpace: FlexibleSpaceBar(
                   centerTitle: true,
                   title: Text(
-                    'My Orders',
+                    'Orders',
                     style: GoogleFonts.roboto(
-                        color: aux2,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 15),
+                        color: appstate.aux6,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18),
                   ),
                 ),
               ),
               SliverPersistentHeader(
                 delegate: _SliverAppBarDelegate(
                   TabBar(
-
-                    labelColor: aux2,
-                    unselectedLabelColor: aux4,
+                    labelColor: appstate.aux2,
+                    unselectedLabelColor: appstate.aux4,
                     indicatorSize: TabBarIndicatorSize.label,
                     tabs: [
                       Tab(text: "Pending"),
                       Tab(text: "Delivered"),
                       Tab(text: "Cancelled"),
                     ],
-
                   ),
                 ),
                 pinned: true,
@@ -80,14 +70,18 @@ class MyState extends State<MyOrders> {
             ];
           },
           body: TabBarView(children: [
-            new tabViews(index: 0,),
-            new tabViews(index: 1,),
-            new tabViews(index: 2,),
+            tabViews(
+              index: 0,
+            ),
+            tabViews(
+              index: 1,
+            ),
+            tabViews(
+              index: 2,
+            ),
           ]),
         ),
       ),
-
-
     );
   }
 }
@@ -98,20 +92,23 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final TabBar _tabBar;
 
   @override
-  double get minExtent => _tabBar.preferredSize.height+1;
+  double get minExtent => _tabBar.preferredSize.height + 1;
 
   @override
-  double get maxExtent => _tabBar.preferredSize.height+1;
+  double get maxExtent => _tabBar.preferredSize.height + 1;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset,
-      bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return new Container(
       color: Colors.white,
       child: Column(
         children: <Widget>[
           _tabBar,
-          Divider(height: 1,color: Color(0xFFE5E5E5),)
+          Divider(
+            height: 1,
+            color: Color(0xFFE5E5E5),
+          )
         ],
       ),
     );
@@ -123,7 +120,6 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
-
 class tabViews extends StatelessWidget {
   final index;
 
@@ -131,7 +127,13 @@ class tabViews extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new StreamBuilder<List<DeliveryItem>>(
+//    for(final item in appstate.deliveries){
+//      if(index==1 && item.status=='PROCESSING') {deliverylayouts.add(DeliveryLayout(item));}
+//      else if(index==2 && item.status=='DELIVERED') {deliverylayouts.add(DeliveryLayout(item));}
+//      else if(index==0){deliverylayouts.add(DeliveryLayout(item));}
+//    }
+
+    return StreamBuilder<List<DeliveryItem>>(
         stream: service.deliveryStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -145,7 +147,7 @@ class tabViews extends StatelessWidget {
             if (index == 0) {
               deliveries.forEach((element) {
                 if(element.status=='PROCESSING'){
-                 selectedItems.add(element);
+                  selectedItems.add(element);
                 }
               });
             }
@@ -155,7 +157,7 @@ class tabViews extends StatelessWidget {
                   selectedItems.add(element);
                 }
               });
-          } else if (index == 2) {
+            } else if (index == 2) {
               deliveries.forEach((element) {
                 if(element.status=='CANCELLED'){
                   selectedItems.add(element);
@@ -166,7 +168,7 @@ class tabViews extends StatelessWidget {
             if(selectedItems.isNotEmpty) {
               return new ListView(
                 children: <Widget>[
-                  for (final item in selectedItems) DeliveryLayout(item)
+                  for (final item in selectedItems) DeliveryVendorLayout(item)
                 ],
               );
             }
@@ -177,7 +179,4 @@ class tabViews extends StatelessWidget {
           );
         });
   }
-
 }
-
-

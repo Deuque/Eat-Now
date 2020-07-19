@@ -8,12 +8,14 @@ import 'package:eat_now/models/personal_info.dart';
 import 'package:eat_now/models/personal_vendor_info.dart';
 import 'package:eat_now/models/user_model.dart';
 import 'package:eat_now/models/vendor_model.dart';
+import 'package:eat_now/services/RxServices.dart';
 import 'package:eat_now/services/auxilliary.dart';
 import 'package:eat_now/validation/register_forms.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -36,16 +38,20 @@ class RegisterVendor extends StatefulWidget {
 }
 
 class MyState extends State<RegisterVendor> {
+  RxServices get service => GetIt.I<RxServices>();
   var _name, _email, _password;
   var _country, _state, _city, _address;
   bool _deliver = true;
   var _deliveryPrice;
   var _bank, _account_no;
-  File logo;
+  var isSelectingCategory = true;
+  String selectedCategory;
+  File logo,banner;
 
   List<CountryModel> countries = [];
   List<StateModel> states = [];
   List<CityModel> cities = [];
+  List<String> categories = [];
   var selCountry, selState;
   final formkey = new GlobalKey<FormState>();
   ApiService apiService = new ApiService();
@@ -69,6 +75,11 @@ class MyState extends State<RegisterVendor> {
         });
       }
     });
+    service.categoryStream.first.then((value){
+      setState(() {
+        categories=value;
+      });
+    });
     super.initState();
   }
 
@@ -76,11 +87,14 @@ class MyState extends State<RegisterVendor> {
   Widget build(BuildContext context) {
     var pr = getDialog(context);
 
-    getImage() async {
+    getImage(lt) async {
       File file = await FilePicker.getFile(type: FileType.image);
-
       setState(() {
-        logo = file;
+        if(lt=='logo') {
+          logo = file;
+        }else{
+          banner = file;
+        }
       });
     }
 
@@ -92,17 +106,18 @@ class MyState extends State<RegisterVendor> {
     }
 
     createVendor() async {
-      if (checkFields() && logo!=null) {
+      if (checkFields() && logo!=null && banner!=null && selectedCategory.isNotEmpty &&selectedCategory!=categories[0]) {
         pr.show();
         Vendor vendor = Vendor(
             persVInfo: PersonalVendorInfo(
-              cemail: _email,
+              cemail: _email.toString().trim(),
               cname: _name,
               cpassword: _password,
               country: _country,
               state: _state,
               city: _city,
               address: _address,
+              category: selectedCategory
             ),
             payVInfo: PaymentVendorInfo(bank: _bank, account_no: _account_no),
             delVInfo:
@@ -120,12 +135,21 @@ class MyState extends State<RegisterVendor> {
             if(Logoresponse.error){
               pr.hide();
               Fluttertoast.showToast(
-                  msg: 'Image Upload Error: ' + Logoresponse.errorMessage,
+                  msg: 'Logo Upload Error: ' + Logoresponse.errorMessage,
+                  toastLength: Toast.LENGTH_LONG);
+              return;
+            }
+            ApiResponse<String> bannerresponse= await CrudOperations.uploadImage(file: banner, key: '${timekey.millisecondsSinceEpoch}', path: 'BannerImages');
+            if(bannerresponse.error){
+              pr.hide();
+              Fluttertoast.showToast(
+                  msg: 'Bannner Upload Error: ' + bannerresponse.errorMessage,
                   toastLength: Toast.LENGTH_LONG);
               return;
             }
             vendor.persVInfo.logoUrl = Logoresponse.data;
-            vendor.persVInfo.logokey = timekey.millisecondsSinceEpoch.toString();
+            vendor.persVInfo.bannerUrl = bannerresponse.data;
+            vendor.persVInfo.imgkey = timekey.millisecondsSinceEpoch.toString();
             await CrudOperations.uploadData(result.data.user.uid, 'vendor', vendor).then((value) {
               pr.hide();
               if (value.data) {
@@ -206,12 +230,10 @@ class MyState extends State<RegisterVendor> {
                             RegForms(
                               label: 'Full Name',
                               resolvetext: (value) => _name = value,
-                              isPassword: false,
                             ),
                             RegForms(
                               label: 'Email',
                               resolvetext: (value) => _email = value,
-                              isPassword: false,
                             ),
                             RegForms(
                               label: 'Password',
@@ -267,11 +289,53 @@ class MyState extends State<RegisterVendor> {
                             RegForms(
                               label: 'Address',
                               resolvetext: (value) => _address = value,
-                              isPassword: false,
                             ),
                             RegImage(
-                              label: logo==null?'':'Image Selected',
-                              resolveFile: getImage,
+                              text: logo==null?'':'Image Selected',
+                              label: 'Select logo',
+                              resolveFile: (){
+                                getImage('logo');
+                              },
+                            ),
+                            RegImage(
+                              text: banner==null?'':'Image Selected',
+                              label: 'Select Banner Image',
+                              resolveFile: (){
+                                getImage('banner');
+                              }
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 5,),
+                      Container(
+                        color: aux1,
+                        padding: myPadding,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Visibility(visible: isSelectingCategory,child: RegDropDown2(resolvetext: (value)=>selectedCategory=value,choices: categories,),),
+                            Visibility(visible: !isSelectingCategory,child: RegForms(label:'Enter Category',resolvetext: (value)=>selectedCategory=value,),),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: InkWell(
+                                onTap: (){
+                                  setState(() {
+                                    isSelectingCategory = !isSelectingCategory;
+                                  });
+                                },
+                                child: Container(
+                                  height: 45,
+                                  width: double.maxFinite,
+                                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                  decoration: bdecor,
+                                  alignment: Alignment.center,
+                                  child: Text(isSelectingCategory?'Create new category':'Select from existing',style: GoogleFonts.sourceSansPro(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                      color: aux4),),
+                                ),
+                              )
                             )
                           ],
                         ),
@@ -294,12 +358,10 @@ class MyState extends State<RegisterVendor> {
                             RegForms(
                               label: 'Bank Name',
                               resolvetext: (value) => _bank = value,
-                              isPassword: false,
                             ),
                             RegForms(
                               label: 'Account No',
                               resolvetext: (value) => _account_no = value,
-                              isPassword: false,
                             ),
                           ],
                         ),
@@ -350,8 +412,8 @@ class MyState extends State<RegisterVendor> {
                               visible: _deliver,
                               child: RegForms(
                                 label: 'Delivery Price',
+                                isNum: true,
                                 resolvetext: (value) => _deliveryPrice = value,
-                                isPassword: false,
                               ),
                             ),
                           ],
@@ -360,12 +422,12 @@ class MyState extends State<RegisterVendor> {
                       SizedBox(height: 12,),
                       Container(
                         width: double.infinity,
-                        height: 87,
+                        height: 82,
                         padding: EdgeInsets.symmetric(horizontal: 25,vertical: 20),
                         color: aux1,
                         child: RaisedButton(
                           shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(30.0),
+                            borderRadius: new BorderRadius.circular(9),
                           ),
                           color: aux2,
                           elevation: 3.0,

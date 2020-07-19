@@ -14,8 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'cart_item_layout.dart';
 import 'delivery_layout.dart';
+import 'edit_profile.dart';
 import 'fade_route.dart';
-import 'food_layout.dart';
 
 class Profile extends StatefulWidget {
   State<Profile> createState() => MyState();
@@ -37,6 +37,8 @@ class MyState extends State<Profile> {
     basicInfo = service.myUser.basicInfo;
     personalInfo = service.myUser.personalInfo;
 
+    Divider div = Divider(color: aux8,);
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: aux1,
@@ -54,9 +56,13 @@ class MyState extends State<Profile> {
             PopupMenuButton<String>(
               onSelected: (choice) {
                 if(choice=='Logout'){
-                  FirebaseAuth.instance.signOut().then((value) {
-                    Navigator.pushReplacement(context, FadeRoute(page: ValType()));
-                  });
+                 try{
+                   FirebaseAuth.instance.signOut().then((value) {
+                     Navigator.pushReplacement(context, FadeRoute(page: ValType()));
+                   });
+                 }catch(e){
+                   Navigator.pushReplacement(context, FadeRoute(page: ValType()));
+                 }
                 }
               },
               itemBuilder: (BuildContext context) {
@@ -76,7 +82,7 @@ class MyState extends State<Profile> {
               SliverAppBar(
                 leading: Container(),
                 backgroundColor: aux1,
-                expandedHeight: 260.0,
+                expandedHeight: 261.0,
                 floating: false,
                 pinned: false,
                 flexibleSpace: FlexibleSpaceBar(
@@ -203,21 +209,38 @@ class MyState extends State<Profile> {
               SliverPersistentHeader(
                 delegate: _SliverTextDelegate(
                   Text(
-                    'ORDER HISTORY',
+                    'Settings',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.asap(
                         color: aux2,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16),
                   ),
                 ),
                 pinned: true,
               ),
             ];
           },
-          body: ListView(
-            children: <Widget>[
-            ],
+          body: Material(
+            color: aux1,
+            child: ListView(
+
+              children: <Widget>[
+                div,
+                SettingsOptions(label: 'Edit Profile',onClick: ()=>Navigator.push(context, FadeRoute(page: EditProfile())),),
+                div,
+                SettingsOptions(label: 'FAQ',),
+                div,
+                SettingsOptions(label: 'Contact Us',),
+                div,
+                SettingsOptions(label: 'Logout',onClick: (){
+                  FirebaseAuth.instance.signOut().then((value) {
+                    Navigator.pushReplacement(context, FadeRoute(page: ValType()));
+                  });
+                },),
+                div,
+              ],
+            ),
           ),
         ));
   }
@@ -229,10 +252,10 @@ class _SliverTextDelegate extends SliverPersistentHeaderDelegate {
   final Text _text;
 
   @override
-  double get minExtent => 42;
+  double get minExtent => 44;
 
   @override
-  double get maxExtent => 42;
+  double get maxExtent => 44;
 
   @override
   Widget build(
@@ -284,3 +307,35 @@ class displayItems extends StatelessWidget {
     );
   }
 }
+
+class SettingsOptions extends StatelessWidget {
+  final label,onClick;
+
+  const SettingsOptions({Key key, this.label, this.onClick}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onClick,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical:8.0,horizontal: 16),
+         child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.asap(
+                    color: aux4,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14),
+              ),
+              Icon(Icons.chevron_right,color: aux8,),
+            ],
+          ),
+      )
+
+    );
+  }
+}
+

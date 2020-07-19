@@ -1,3 +1,4 @@
+import 'package:eat_now/models/cart_item.dart';
 import 'package:eat_now/models/food_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import '../models/cart_item.dart';
 
 import '../models/user_model.dart';
 import '../models/delivery_item.dart';
@@ -114,7 +114,7 @@ class MyService with ChangeNotifier, DiagnosticableTreeMixin {
   List<CartItem> getCartList() => cart;
 
   Future<bool> addToCart(CartItem item) async {
-    if (isThere(item)) return false;
+    if (isThere(item)!=null) return false;
     cart.add(item);
     return true;
   }
@@ -136,13 +136,13 @@ class MyService with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  bool isThere(CartItem newItem) {
+  CartItem isThere(CartItem newItem) {
     for (final item in cart) {
       if (item.foodItem.id == newItem.foodItem.id) {
-        return true;
+        return item;
       }
     }
-    return false;
+    return null;
   }
 
   void deleteAllCartItems(){
